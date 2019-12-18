@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+
+<title>HT-Pharmacy</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link th:href="@{/css/style.css}" rel='stylesheet' type='text/css' />
+<link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css}">
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
+<script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+ <!-- side nav css file -->
+ <link th:href="@{/css/SidebarNav.min.css}" media='all' rel='stylesheet' type='text/css'/>
+ <!-- side nav css file -->
+<script th:src="@{/js/dept.js}"></script>
+ <script type="text/javascript" charset="utf8" th:src="@{http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js}"></script>
+  <script type="text/javascript" charset="utf8" th:src="@{http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js}"></script>
+<!-- Metis Menu -->
+<link th:href="@{/css/custom.css}" rel="stylesheet">
+<!--//Metis Menu -->
+<style>
+	.treeview span
+	{
+		margin-left: 30px;
+	}
+	#imageProduct{
+		width:50px;
+		height:30px;
+	}
+</style>
+</head> 
+<body class="cbp-spmenu-push">
+	<div class="main-content">
+	<div class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-spmenu-s1">
+		<aside class="sidebar-left">
+      <nav class="navbar navbar-inverse">
+          <div class="navbar-header">
+            <h1><a class="navbar-brand" href="index.html"><span class="fa fa-area-chart"></span>Pharmacy<span class="dashboard_text">Admin manager</span></a></h1>
+          </div>
+          <div class=" navbar-collapse">
+            <ul class="sidebar-menu">
+              <li class="treeview">
+				<a href="index.html"><i class="glyphicon glyphicon-certificate"></i><span>Sản phẩm</span></a>
+			  </li>
+			  <li class="treeview">
+				<a href="#"><i class="glyphicon glyphicon-bed"></i><span>Kho hàng</span></a>
+			  </li>
+			  <li class="treeview">
+				<a href="charts.html"><i class="glyphicon glyphicon-list-alt"></i><span>Đơn hàng</span></a>
+			  </li>
+			  <li class="treeview">
+				<a href="#"><i class="glyphicon glyphicon-bitcoin"></i> <span>Công nợ</span></a>
+			  </li>
+			  <li class="treeview">
+				<a href="widgets.html"><i class="glyphicon glyphicon-leaf"></i> <span>Nhà cung cấp</span></a>
+			  </li>
+			  <li class="treeview">
+				<a href="#"><i class="glyphicon glyphicon-duplicate"></i> <span>Nhật ký</span>
+				<small class="label pull-right label-info">08</small>
+				</a>
+			  </li>
+			  <li class="treeview">
+			    <a href="index.html"><i class="glyphicon glyphicon-retweet"></i> <span>Thu chi</span></a>
+			  </li>
+			  <li class="treeview">
+			    <a href="index.html"><i class="glyphicon glyphicon-user"></i> <span>Tài khoản</span></a>
+			  </li>
+			  <li class="treeview">
+			    <a th:href="@{/linkExportReport}"><i class="glyphicon glyphicon-equalizer"></i><span>Báo cáo</span></a>
+			  </li>
+			  <li class="treeview">
+			    <a th:href="@{/linkStatistic}"><i class="glyphicon glyphicon-equalizer"></i><span>Thống kê</span></a>
+			  </li>
+            </ul>
+          </div>
+      </nav>
+    </aside>
+	</div>
+		<div class="sticky-header header-section ">
+			<div class="header-left">
+				<button id="showLeftPush"><i class="glyphicon glyphicon-align-justify"></i></button>
+			</div>
+			<div class="header-right">
+				<div class="profile_details">		
+					<ul>
+						<li class="dropdown profile_details_drop">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+								<div class="profile_img">	
+									<span class="prfil-img"><img th:src="@{/images/2.jpg}" alt=""> </span> 
+									<div class="user-name">
+										<p>Phan Thị Quang Thư</p>
+										<span>Administrator</span>
+									</div>
+									<i class="glyphicon glyphicon-menu-down"></i>
+									<div class="clearfix"></div>	
+								</div>	
+							</a>
+							<ul class="dropdown-menu drp-mnu">
+								<li> <a href="#"><i class="fa fa-suitcase"></i> Thông tin</a> </li> 
+								<li> <a href="#"><i class="fa fa-sign-out"></i> Đăng xuất</a> </li>
+							</ul>
+						</li>
+					</ul>
+				</div>		
+			</div>
+		</div>
+		<div id="page-wrapper">
+				<h2 class="text-center text-primary">QUẢN LÝ KHO HÀNG</h2>
+				
+				<div class="inline-form widget-shadow">
+						<div class="form-body">
+						<div data-example-id="simple-form-inline"> 
+							<form class="form-inline" id="formDeptSearch"> 
+								<div class="form-group"> 
+									<label>Tên NSX</label>
+									<select class="form-control" id="name_supplier_dept">
+										<option value="-1"></option>
+										<option th:each="gp : ${listSupplier}" th:value="${gp.id}" th:text="${gp.supplier_name}"></option>
+									</select> 
+								</div> 
+								<div class="form-group">
+									<label>Ngày BĐ</label>
+									<input type="date" class="form-control" id="date_start_dept" name="date" placeholder="Ngày bắt đầu">
+								</div>
+								<div class="form-group">
+									<label >Ngày KT</label>
+									<input type="date" class="form-control" id="date_end_dept" name="date" placeholder="Ngày kết thúc">
+								</div>
+								<button type="submit" class="btn btn-default">Tìm kiếm</button> 
+							</form> 
+						</div>
+					</div>
+				</div>
+				<div class="main-page">
+					<div class="tables">
+						<div class="bs-example widget-shadow" data-example-id="hoverable-table">
+							<table class="table table-hover" id="tableProduct"> 
+								<thead> 
+									<tr> 
+										<th>ID</th> 
+										<th>Tên NSX</th> 
+										<th>Số tiền nợ</th> 
+										<th>Số tiền đã trả</th>  
+										<th>Ngày BĐ</th> 
+										<th>Ngày KT</th> 
+										<th>Hạn mức</th> 
+										<th>Cho phép vượt</th>
+										<th></th>
+									</tr> 
+								</thead> 
+								<tbody id="table_data"> 
+								</tbody> 
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-7">
+					</div>
+					<div class="col-md-2">
+					</div>
+					<div class="col-md-3">
+						<button style="margin-top: 30px;" type="button" onclick="refresh()" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#addProductModal">Thêm mới</button>
+					</div>
+					<!-- Modal -->
+									<div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog" style="width: 70%; margin-left:16%;" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+							<div class="form-grids row widget-shadow" data-example-id="basic-forms"> 
+							<div class="form-body">
+								<form th:action="@{/addDept}" th:object="${deptForm}" id="formDept" method="POST"> 
+									<div class="form-group row">
+										<label style="color:red;" id="messageError"></label> 
+									</div>
+									<div class="form-group"> 
+										<label for="exampleInputPassword1">Tên nhà sản xuất</label>
+										<select class="form-control" id="name_supplier" th:field="*{fk_supplier_id}">
+											<option th:each="gp : ${listSupplier}" th:value="${gp.id}" th:text="${gp.supplier_name}"></option>
+										</select>
+										 
+									</div>
+									<div class="form-group row">
+										<div class="col-md-6">
+											<label for="exampleInputPassword1">Số tiền nợ</label> 
+											<input type="number" onchange="checkOwn()" class="form-control" id="dept_pay" th:field="*{money_own}" placeholder="Số tiền nợ"> 
+											<input type="hidden" class="form-control" id="id_dept" th:field="*{id}"> 
+										</div>
+										<div class="col-md-6">
+											<label for="exampleInputPassword1">Số tiền đã trả</label>
+											<input type="number" class="form-control" id="dept_paied" th:field="*{money_paided}" placeholder="Số tiền đã trả"> 
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="col-md-6">
+											<label for="exampleInputPassword1">Ngày bắt đầu</label>
+											<input type="date" class="form-control" id="date_start" th:field="*{date_start}" placeholder="Ngày bắt đầu">
+										</div>
+										<div class="col-md-6">
+											<label for="exampleInputPassword1">Ngày kết thúc</label>
+											<input type="date" class="form-control" id="date_end" th:field="*{date_end}" placeholder="Ngày kết thúc">
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="col-md-6">
+											<label >Hạn mức</label>
+											<input onchange="check()" type="number" class="form-control" id="limit" th:field="*{limit}" placeholder="Hạn mức">
+										</div>
+										<div class="col-md-6">
+											<label for="exampleInputPassword1">Cho phép vượt</label>
+											<input type="checkbox" class="form-control" id="over_limit" value="0" th:field="*{over_limit}" >
+										</div>
+									</div>  
+									<div class="form-group row">
+										<label for="exampleInputPassword1">Điều khoản</label>
+										<textarea id="term" class="form-control" rows="4" cols="70" th:field="*{term}"></textarea>
+									</div>  
+									<div class="form-group"> 
+										<label for="exampleInputEmail1">Ghi chú</label>
+										<textarea id="note" class="form-control" rows="4" cols="70" th:field="*{note}"></textarea>
+									</div>
+									<button type="submit" class="btn btn-primary" id="btnSave">Lưu</button> 
+								</form> 
+							</div>
+						</div>
+						</div>
+					</div>
+					</div>
+				</div>
+				</div>
+			</div>
+		<div class="footer">
+		   <p>&copy; 2019 HT-Pharmacy. All Rights Reserved | Design by <a href="#" target="_blank">HT</a></p>
+	   </div>
+	</div>
+	<!-- //side nav js -->
+	
+	<!-- Classie --><!-- for toggle left push menu script -->
+		<script th:src="@{/js/classie.js}"></script>
+		<script>
+			var menuLeft = document.getElementById( 'cbp-spmenu-s1' ),
+				showLeftPush = document.getElementById( 'showLeftPush' ),
+				body = document.body;
+				
+			showLeftPush.onclick = function() {
+				classie.toggle( this, 'active' );
+				classie.toggle( body, 'cbp-spmenu-push-toright' );
+				classie.toggle( menuLeft, 'cbp-spmenu-open' );
+				disableOther( 'showLeftPush' );
+			};
+			
+			function disableOther( button ) {
+				if( button !== 'showLeftPush' ) {
+					classie.toggle( showLeftPush, 'disabled' );
+				}
+			}
+			//////////////////////
+			
+		</script>
+</body>
+</html>

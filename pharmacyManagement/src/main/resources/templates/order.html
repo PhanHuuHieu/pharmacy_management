@@ -1,0 +1,296 @@
+<!DOCTYPE HTML>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+
+<title>HT-Pharmacy</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link th:href="@{/css/style.css}" rel='stylesheet' type='text/css' />
+<link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css}">
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
+<script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+ <!-- side nav css file -->
+ <link th:href="@{/css/SidebarNav.min.css}" media='all' rel='stylesheet' type='text/css'/>
+ <!-- side nav css file -->
+<script th:src="@{/js/order.js}"></script>
+ <script type="text/javascript" charset="utf8" th:src="@{http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js}"></script>
+  <script type="text/javascript" charset="utf8" th:src="@{http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js}"></script>
+<!-- Metis Menu -->
+<link th:href="@{/css/custom.css}" rel="stylesheet">
+<!--//Metis Menu -->
+<style>
+	.treeview span
+	{
+		margin-left: 30px;
+	}
+	#imageProduct{
+		width:50px;
+		height:30px;
+	}
+</style>
+</head> 
+<body class="cbp-spmenu-push">
+	<div class="main-content">
+	<div class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-spmenu-s1">
+		<aside class="sidebar-left">
+      <nav class="navbar navbar-inverse">
+          <div class="navbar-header">
+            <h1><a class="navbar-brand" href="index.html"><span class="fa fa-area-chart"></span>Pharmacy<span class="dashboard_text">Admin manager</span></a></h1>
+          </div>
+          <div class=" navbar-collapse">
+            <ul class="sidebar-menu">
+              <li class="treeview">
+				<a href="index.html"><i class="glyphicon glyphicon-certificate"></i><span>Sản phẩm</span></a>
+			  </li>
+			  <li class="treeview">
+				<a href="#"><i class="glyphicon glyphicon-bed"></i><span>Kho hàng</span></a>
+			  </li>
+			  <li class="treeview">
+				<a href="charts.html"><i class="glyphicon glyphicon-list-alt"></i><span>Đơn hàng</span></a>
+			  </li>
+			  <li class="treeview">
+				<a href="#"><i class="glyphicon glyphicon-bitcoin"></i> <span>Công nợ</span></a>
+			  </li>
+			  <li class="treeview">
+				<a href="widgets.html"><i class="glyphicon glyphicon-leaf"></i> <span>Nhà cung cấp</span></a>
+			  </li>
+			  <li class="treeview">
+				<a href="#"><i class="glyphicon glyphicon-duplicate"></i> <span>Nhật ký</span>
+				<small class="label pull-right label-info">08</small>
+				</a>
+			  </li>
+			  <li class="treeview">
+			    <a href="index.html"><i class="glyphicon glyphicon-retweet"></i> <span>Thu chi</span></a>
+			  </li>
+			  <li class="treeview">
+			    <a href="index.html"><i class="glyphicon glyphicon-user"></i> <span>Tài khoản</span></a>
+			  </li>
+			  <li class="treeview">
+			    <a href="#"><i class="glyphicon glyphicon-equalizer"></i><span>Thống kê</span></a>
+			  </li>
+            </ul>
+          </div>
+      </nav>
+    </aside>
+	</div>
+		<div class="sticky-header header-section ">
+			<div class="header-left">
+				<button id="showLeftPush"><i class="glyphicon glyphicon-align-justify"></i></button>
+			</div>
+			<div class="header-right">
+				<div class="profile_details">		
+					<ul>
+						<li class="dropdown profile_details_drop">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+								<div class="profile_img">	
+									<span class="prfil-img"><img th:src="@{/images/2.jpg}" alt=""> </span> 
+									<div class="user-name">
+										<p>Phan Thị Quang Thư</p>
+										<span>Administrator</span>
+									</div>
+									<i class="glyphicon glyphicon-menu-down"></i>
+									<div class="clearfix"></div>	
+								</div>	
+							</a>
+							<ul class="dropdown-menu drp-mnu">
+								<li> <a href="#"><i class="fa fa-suitcase"></i> Thông tin</a> </li> 
+								<li> <a href="#"><i class="fa fa-sign-out"></i> Đăng xuất</a> </li>
+							</ul>
+						</li>
+					</ul>
+				</div>		
+			</div>
+		</div>
+		<div id="page-wrapper">
+				<h2 class="text-center text-primary">QUẢN LÝ ĐƠN HÀNG</h2>
+				<div class="inline-form widget-shadow">
+					<div class="form-body">
+						<div data-example-id="simple-form-inline"> 
+							<form class="form-inline" id="formOrderSearch" name="nformProduct" method="POST"> 
+								<div class="form-group"><p>Chọn nhân viên</p> </div>
+								<div class="form-group"> 
+									<select class="form-control" name="fk_employee_id" id="fk_employee_id">
+										<option value="-1"></option>
+										<option th:each="gp : ${listEmployee}" th:value="${gp.id}" th:text="${gp.name}"></option>
+									</select>
+								</div> 
+								<div class="form-group"><p>Chọn khách hàng</p> </div>
+								<div class="form-group">
+									<select class="form-control" name="fk_customer_id" id="fk_customer_id">
+										<option value="-1"></option>
+										<option th:each="gp : ${listCustomer}" th:value="${gp.id}" th:text="${gp.name}"></option>
+									</select>
+								</div> 
+								<div class="form-group"><p>Chọn ngày mua hàng</p> </div>
+								<div class="form-group">
+									<input type="date" class="form-control" id="dateOrder">
+								</div>
+								<button type="submit" class="btn btn-default">Tìm kiếm</button> 
+							</form> 
+						</div>
+					</div>
+				</div>
+				<div class="main-page">
+					<div class="tables">
+						<div class="bs-example widget-shadow" data-example-id="hoverable-table">
+							<table class="table table-hover" id="tableProduct"> 
+								<thead> 
+									<tr> 
+										<th>ID</th> 
+										<th>Tên Khách hàng</th> 
+										<th>Tên nhân viên</th> 
+										<th>Tổng tiền</th> 
+										<th>Ngày mua</th> 
+									</tr> 
+								</thead> 
+								<tbody id="table_data"> 
+								</tbody> 
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-7">
+					</div>
+					<div class="col-md-2">
+					</div>
+					<div class="col-md-3">
+						<button style="margin-top: 30px;" type="button" onclick="refresh()" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#exportReport">Xuất báo cáo</button>
+					</div>
+					<!-- Modal -->
+					<div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog" style="width: 70%; margin-left:16%;" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							</div>
+							<div class="modal-body">
+								<div class="form-grids row widget-shadow" data-example-id="basic-forms"> 
+								<div class="form-body">
+									<form> 
+										<div class="form-group row"> 
+											<div class="col-md-3">
+												<label>ID đơn hàng</label> 
+											</div>
+											<div class="col-md-9">
+												<p>1232435ADSF</p>
+											</div>
+										</div> 
+										<div class="form-group row"> 
+											<div class="col-md-3">
+												<label>Tên khách hàng</label> 
+											</div>
+											<div class="col-md-9">
+												<p>Phan Thị Quang Thư</p>
+											</div>
+										</div>
+										<div class="form-group row"> 
+											<div class="col-md-3">
+												<label>Tổng tiền hóa đơn</label> 
+											</div>
+											<div class="col-md-9">
+												<p>123.000.000</p>
+											</div>
+										</div>
+									</form> 
+								</div>
+								<table class="table table-hover" id="tableProduct"> 
+									<thead> 
+										<tr> 
+											<th>Tên sản phẩm</th> 
+											<th>Giá</th> 
+											<th>Số lượng</th> 
+											<th>Tổng tiền</th> 
+											<th>Đơn giá</th> 
+										</tr> 
+									</thead> 
+									<tbody id="table_data"> 
+									</tbody> 
+								</table>
+							</div>
+							</div>
+						</div>
+						</div>
+					</div>
+					<!-- Modal export report-->
+					<div class="modal fade" id="exportReport" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog" style="width: 70%; margin-left:16%;" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							</div>
+							<div class="modal-body">
+								<div class="form-grids row widget-shadow" data-example-id="basic-forms"> 
+								<div class="form-body">
+									<form th:action="@{/exportReport}" th:object="${orderReportForm}" method="POST"> 
+										<div class="form-group row">
+											<div class="col-md-6">
+												<label>Ngày</label> 
+												<input type="date" class="form-control" th:field="*{date}"> 
+											</div>
+											<div class="col-md-6">
+												<label>Loại</label>
+												<select class="form-control" th:field="*{groupProduct}">
+													<option value="-1"></option>
+													<option th:each="gp : ${listProductGroup}" th:value="${gp.id}" th:text="${gp.product_group_name}"></option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group row">
+											<div class="col-md-6">
+												<label>Tên file báo cáo</label> 
+												<input type="text" class="form-control" th:field="*{nameFile}"> 
+											</div>
+											<div class="col-md-6">
+												<label>Nhân viên</label>
+												<select class="form-control" th:field="*{nameEmployee}">
+													<option value="-1"></option>
+													<option th:each="gp : ${listEmployee}" th:value="${gp.id}" th:text="${gp.name}"></option>
+												</select>
+											</div>
+										</div>
+										<br/>
+										<button type="submit" class="btn btn-primary">Xuất báo cáo</button> 
+									</form> 
+								</div>
+							</div>
+							</div>
+						</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<div class="footer">
+		   <p>&copy; 2019 HT-Pharmacy. All Rights Reserved | Design by <a href="#" target="_blank">HT</a></p>
+	   </div>
+	</div>
+	<!-- //side nav js -->
+	
+	<!-- Classie --><!-- for toggle left push menu script -->
+		<script th:src="@{/js/classie.js}"></script>
+		<script>
+			var menuLeft = document.getElementById( 'cbp-spmenu-s1' ),
+				showLeftPush = document.getElementById( 'showLeftPush' ),
+				body = document.body;
+				
+			showLeftPush.onclick = function() {
+				classie.toggle( this, 'active' );
+				classie.toggle( body, 'cbp-spmenu-push-toright' );
+				classie.toggle( menuLeft, 'cbp-spmenu-open' );
+				disableOther( 'showLeftPush' );
+			};
+			
+			function disableOther( button ) {
+				if( button !== 'showLeftPush' ) {
+					classie.toggle( showLeftPush, 'disabled' );
+				}
+			}
+			//////////////////////
+			
+		</script>
+</body>
+</html>

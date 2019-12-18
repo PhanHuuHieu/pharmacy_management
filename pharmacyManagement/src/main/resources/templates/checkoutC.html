@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+<title>HT Pharmacy</title>
+<!-- for-mobile-apps -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+function hideURLbar(){ window.scrollTo(0,1); } </script>
+<link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css}">
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
+<script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<link th:href="@{/css/styleweb.css}" rel="stylesheet" type="text/css" media="all" />
+<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+<!-- font-awesome icons -->
+<link th:href="@{/css/font-awesome.css}" rel="stylesheet" type="text/css" media="all" /> 
+<!-- //font-awesome icons -->
+<!-- js -->
+<script th:src="@{/js/jquery-1.11.1.min.js}"></script>
+<!-- start-smoth-scrolling -->
+<script type="text/javascript" th:src="@{/js/move-top.js}"></script>
+<script type="text/javascript" th:src="@{/js/easing.js}"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		$(".scroll").click(function(event){		
+			event.preventDefault();
+			$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+		});
+	});
+</script>
+<!-- start-smoth-scrolling -->
+</head>
+
+<body>
+<!-- header -->
+	<div class="agileits_header">
+		<div class="w3l_offers">
+			<a href="index.html">HT Pharmacy</a>
+		</div>
+		<div class="w3l_search">
+			<form action="#" method="post">
+				<input type="text" name="Product" value="Search a product..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search a product...';}" required="">
+				<input type="submit" value=" ">
+			</form>
+		</div>
+
+		<div class="product_list_header">  
+			<form action="#" method="post" class="last">
+				<fieldset>
+					<input type="hidden" name="cmd" value="_cart" />
+					<input type="hidden" name="display" value="1" />
+					<input type="submit" name="submit" value="View your cart" class="button" />
+				</fieldset>
+			</form>
+		</div>
+		<div class="w3l_header_right" style="margin-left: 50px;">
+			<ul>
+				<li class="dropdown profile_details_drop">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user" aria-hidden="true"></i><span class="caret"></span></a>
+					<div class="mega-dropdown-menu">
+						<div class="w3ls_vegetables">
+							<ul class="dropdown-menu drp-mnu">
+								<li><a href="login.html">Đăng nhập</a></li> 
+								<li><a href="login.html">Đăng kí</a></li>
+							</ul>
+						</div>                  
+					</div>	
+				</li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>
+	<!-- script-for sticky-nav -->
+	<script>
+		$(document).ready(function() {
+			var navoffeset=$(".agileits_header").offset().top;
+			$(window).scroll(function(){
+				var scrollpos=$(window).scrollTop(); 
+				if(scrollpos >=navoffeset){
+					$(".agileits_header").addClass("fixed");
+				}else{
+					$(".agileits_header").removeClass("fixed");
+				}
+			});
+
+		});
+	</script>
+	<br><br>
+	<!-- //header -->
+	<!-- products-breadcrumb -->
+	<div class="products-breadcrumb">
+		<div class="container">
+			<ul>
+				<li><i class="fa fa-home" aria-hidden="true"></i><a href="index.html">Trang chủ</a><span>|</span></li>
+				<li>Giỏ hàng</li>
+			</ul>
+		</div>
+	</div>
+	<!-- //products-breadcrumb -->
+	<!-- banner -->
+	<div class="banner" style="margin-left: -30%">
+		<div class="w3l_banner_nav_right">
+			<!-- about -->
+			<div class="privacy about" style="margin-top:-40px; ">
+				<h3>Giỏ<span>Hàng</span></h3>
+
+				<div class="checkout-right">
+					<h4>Có 3 sản phẩm: <span>Trong giỏ hàng của bạn</span></h4>
+					<table class="timetable_sub">
+						<thead>
+							<tr>
+								<th>STT</th>	
+								<th>Sản phẩm</th>
+								<th>Số lượng</th>
+								<th>Tên sản phẩm</th>
+
+								<th>Giá</th>
+								<th>Xóa</th>
+							</tr>
+						</thead>
+						<tbody><tr class="rem1">
+							<td class="invert">1</td>
+							<td class="invert-image"><a href="single.html"><img src="images/1.png" alt=" " class="img-responsive"></a></td>
+							<td class="invert">
+								<div class="quantity"> 
+									<div class="quantity-select">                           
+										<div class="entry value-minus">&nbsp;</div>
+										<div class="entry value"><span>1</span></div>
+										<div class="entry value-plus active">&nbsp;</div>
+									</div>
+								</div>
+							</td>
+							<td class="invert">Dầu ăn</td>
+
+							<td class="invert">$290.00</td>
+							<td class="invert">
+								<div class="rem">
+									<a href="#"><i class="fa fa-close" aria-hidden="true"></i></a>
+								</div>
+
+							</td>
+						</tr>
+						<tr class="rem2">
+							<td class="invert">2</td>
+							<td class="invert-image"><a href="single.html"><img src="images/3.png" alt=" " class="img-responsive"></a></td>
+							<td class="invert">
+								<div class="quantity"> 
+								    <div class="input-group"> 
+								    	<span class="input-group-btn">
+										    <button type="button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="quant[1]"> 
+										    	<span class="glyphicon glyphicon-minus"></span> 
+										    </button>
+									    </span>
+									    <input type="text" name="quant[1]" class="entry value input-number" value="1">
+									    <span class="input-group-btn">
+									    	<button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]"> 
+									    		<span class="glyphicon glyphicon-plus"></span> 
+									    	</button>
+									    </span> 
+									</div>        
+								</div>		     
+							</td>
+							<td class="invert">Gạo</td>
+
+							<td class="invert">$250.00</td>
+							<td class="invert">
+								<div class="rem">
+									<div class="close2"> </div>
+								</div>
+
+							</td>
+						</tr>
+						<tr class="rem3">
+							<td class="invert">3</td>
+							<td class="invert-image"><a href="single.html"><img src="images/2.png" alt=" " class="img-responsive"></a></td>
+							<td class="invert">
+								<div class="quantity"> 
+									<div class="quantity-select">                           
+										<div class="entry value-minus">&nbsp;</div>
+										<div class="entry value"><span>1</span></div>
+										<div class="entry value-plus active">&nbsp;</div>
+									</div>
+								</div>
+							</td>
+							<td class="invert">Nước mắm</td>
+
+							<td class="invert">$15.00</td>
+							<td class="invert">
+								<div class="rem">
+									<div class="close3"> </div>
+								</div>
+
+							</td>
+						</tr>
+
+					</tbody></table>
+				</div>
+				<div class="checkout-left">	
+					<div class="row">
+						<div class="col-md-4 checkout-left-basket">
+							<h4>Tổng cộng</h4>
+							<ul>
+								<li>SP1 <i></i> <span>$15.00 </span></li>
+								<li>SP2 <i></i> <span>$25.00 </span></li>
+								<li>SP3 <i></i> <span>$29.00 </span></li>
+								<li>Phí dịch vụ <i></i> <span>$15.00</span></li>
+								<li>Tổng <i></i> <span>$84.00</span></li>
+							</ul>
+						</div>
+					</div>
+					<div class="row">
+						<div class="checkout-right-basket">
+							<a href="payment.html">Thanh toán <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
+						</div>
+					</div>
+					
+
+					<div class="clearfix"> </div>
+
+				</div>
+
+			</div>
+			<!-- //about -->
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<!-- //banner -->
+<div class="footer">
+	<div class="container">
+		<div class="col-md-3 w3_footer_grid">
+			<h3>information</h3>
+			<ul class="w3_footer_grid_list">
+				<li><a href="events.html">Chuyên nghiệp</a></li>
+				<li><a href="about.html">Tận tâm</a></li>
+				<li><a href="products.html">Chất lượng</a></li>
+			</ul>
+		</div>
+		<div class="col-md-3 w3_footer_grid">
+			<h3>policy info</h3>
+			<ul class="w3_footer_grid_list">
+				<li><a href="faqs.html">Bảo mật thông tin</a></li>
+				<li><a href="privacy.html">Chính sách đổi trả</a></li>
+				<li><a href="privacy.html">Bảo hành</a></li>
+			</ul>
+		</div>
+		<div class="col-md-3 w3_footer_grid">
+			<h3>what in stores</h3>
+			<ul class="w3_footer_grid_list">
+				<li><a href="pet.html">Tủ thuốc gia đình</a></li>
+				<li><a href="frozen.html">Thực phẩm chức năng</a></li>
+				<li><a href="kitchen.html">Thuốc đặc trị</a></li>
+				<li><a href="products.html">Thuốc da liễu</a></li>
+			</ul>
+		</div>
+		<div class="col-md-3 w3_footer_grid">
+			<h3>CAM KẾT</h3>
+			<ul class="w3_footer_grid_list1">
+				<li>Nếu bạn phát hiện shop chúng tôi bán hàng giả, chúng tôi xin hoàn 200% sản phẩm cho bạn. Xin cảm ơn</li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+		<div class="agile_footer_grids">
+			<div class="col-md-3 w3_footer_grid agile_footer_grids_w3_footer">
+				<div class="w3_footer_grid_bottom">
+					<h4>100% secure payments</h4>
+					<img src="images/card.png" alt=" " class="img-responsive" />
+				</div>
+			</div>
+			<div class="col-md-3 w3_footer_grid agile_footer_grids_w3_footer">
+				<div class="w3_footer_grid_bottom">
+					<h5>connect with us</h5>
+					<ul class="agileits_social_icons">
+						<li><a href="#" class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+						<li><a href="#" class="twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+						<li><a href="#" class="google"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+						<li><a href="#" class="instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+						<li><a href="#" class="dribbble"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+</div>
+		<!-- //footer -->
+		<!-- Bootstrap Core JavaScript -->
+		<script src="js/bootstrap.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				$(".dropdown").hover(            
+					function() {
+						$('.dropdown-menu', this).stop( true, true ).slideDown("fast");
+						$(this).toggleClass('open');        
+					},
+					function() {
+						$('.dropdown-menu', this).stop( true, true ).slideUp("fast");
+						$(this).toggleClass('open');       
+					}
+					);
+			});
+		</script>
+		<!-- here stars scrolling icon -->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$().UItoTop({ easingType: 'easeOutQuart' });
+
+			});
+		</script>
+		<!-- //here ends scrolling icon -->
+		<script th:src="@{/js/minicart.js}"></script>
+		<script>
+			paypal.minicart.render();
+
+			paypal.minicart.cart.on('checkout', function (evt) {
+				var items = this.items(),
+				len = items.length,
+				total = 0,
+				i;
+
+			// Count the number of each item in the cart
+			for (i = 0; i < len; i++) {
+				total += items[i].get('quantity');
+			}
+
+			if (total < 0) {
+				alert('The minimum order quantity is 0. Please add more to your shopping cart before checking out');
+				evt.preventDefault();
+			}
+		});
+			
+			$( document ).ready(function() {
+			    $('.btn-number').click(function(e){
+			        e.preventDefault();
+			        
+			        var fieldName = $(this).attr('data-field');
+			        var type      = $(this).attr('data-type');
+			        var input = $("input[name='"+fieldName+"']");
+			        var currentVal = parseInt(input.val());
+			        if (!isNaN(currentVal)) {
+			            if(type == 'minus') {
+			                var minValue = parseInt(input.attr('min')); 
+			                if(!minValue) minValue = 1;
+			                if(currentVal > minValue) {
+			                    input.val(currentVal - 1).change();
+			                } 
+			                if(parseInt(input.val()) == minValue) {
+			                    $(this).attr('disabled', true);
+			                }
+			    
+			            } else if(type == 'plus') {
+			                var maxValue = parseInt(input.attr('max'));
+			                if(!maxValue) maxValue = 9999999999999;
+			                if(currentVal < maxValue) {
+			                    input.val(currentVal + 1).change();
+			                }
+			                if(parseInt(input.val()) == maxValue) {
+			                    $(this).attr('disabled', true);
+			                }
+			    
+			            }
+			        } else {
+			            input.val(0);
+			        }
+			    });
+			    $('.input-number').focusin(function(){
+			       $(this).data('oldValue', $(this).val());
+			    });
+			    $('.input-number').change(function() {
+			        
+			        var minValue =  parseInt($(this).attr('min'));
+			        var maxValue =  parseInt($(this).attr('max'));
+			        if(!minValue) minValue = 1;
+			        if(!maxValue) maxValue = 9999999999999;
+			        var valueCurrent = parseInt($(this).val());
+			        
+			        var name = $(this).attr('name');
+			        if(valueCurrent >= minValue) {
+			            $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+			        } else {
+			            alert('Sorry, the minimum value was reached');
+			            $(this).val($(this).data('oldValue'));
+			        }
+			        if(valueCurrent <= maxValue) {
+			            $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+			        } else {
+			            alert('Sorry, the maximum value was reached');
+			            $(this).val($(this).data('oldValue'));
+			        }
+			        
+			        
+			    });
+			    $(".input-number").keydown(function (e) {
+			            // Allow: backspace, delete, tab, escape, enter and .
+			            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+			                 // Allow: Ctrl+A
+			                (e.keyCode == 65 && e.ctrlKey === true) || 
+			                 // Allow: home, end, left, right
+			                (e.keyCode >= 35 && e.keyCode <= 39)) {
+			                     // let it happen, don't do anything
+			                     return;
+			            }
+			            // Ensure that it is a number and stop the keypress
+			            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+			                e.preventDefault();
+			            }
+			    });
+			});
+	</script>
+</body>
