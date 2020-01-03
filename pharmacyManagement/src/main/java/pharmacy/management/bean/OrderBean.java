@@ -1,116 +1,58 @@
 package pharmacy.management.bean;
 
 public class OrderBean {
-	private int id;
+	private String id;
 	private String nameCustomer;
-	private String nameEmployee;
-	private double totalMoney;
 	private String date;
-	private String nameProductGroup;
-	private String nameProduct;
-	public String getNameProduct() {
-		return nameProduct;
-	}
+	private String nameProducts;
 
-	public void setNameProduct(String nameProduct) {
-		this.nameProduct = nameProduct;
-	}
-
-	public String getNameProductGroup() {
-		return nameProductGroup;
-	}
-
-	public void setNameProductGroup(String nameProductGroup) {
-		this.nameProductGroup = nameProductGroup;
-	}
-
-	public double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
-
-	public double getPriceSell() {
-		return priceSell;
-	}
-
-	public void setPriceSell(double priceSell) {
-		this.priceSell = priceSell;
-	}
-
-	public double getPriceOrginal() {
-		return priceOrginal;
-	}
-
-	public void setPriceOrginal(double priceOrginal) {
-		this.priceOrginal = priceOrginal;
-	}
-
-	public double getTax() {
-		return tax;
-	}
-
-	public void setTax(double tax) {
-		this.tax = tax;
-	}
-	private double amount;
-	private double priceSell;
-	private double priceOrginal;
-	private double tax;
-	
-	public OrderBean()
-	{
-		
-	}
-	
-	public OrderBean(int id, String nameCustomer, String nameEmployee, double totalMoney, String date) {
+	public OrderBean(String id, String date) {
 		super();
 		this.id = id;
-		this.nameCustomer = nameCustomer;
-		this.nameEmployee = nameEmployee;
-		this.totalMoney = totalMoney;
 		this.date = date;
 	}
 
-	public OrderBean(double tax,String nameProduct,String nameEmployee,String nameProductGroup) {
+	public OrderBean(String id, String date, String nameCustomer) {
 		super();
-		this.tax = tax;
-		this.nameProduct=nameProduct;
-		this.nameEmployee=nameEmployee;
-		this.nameProductGroup=nameProductGroup;
+		this.id = id;
+		this.date = date;
+		this.nameCustomer = nameCustomer;
 	}
 
-	public int getId() {
+	public OrderBean(String nameProducts) {
+		super();
+		this.nameProducts = nameProducts;
+	}
+
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+
+	public void setId(String id) {
 		this.id = id;
 	}
+
 	public String getNameCustomer() {
 		return nameCustomer;
 	}
+
 	public void setNameCustomer(String nameCustomer) {
 		this.nameCustomer = nameCustomer;
 	}
-	public String getNameEmployee() {
-		return nameEmployee;
-	}
-	public void setNameEmployee(String nameEmployee) {
-		this.nameEmployee = nameEmployee;
-	}
-	public double getTotalMoney() {
-		return totalMoney;
-	}
-	public void setTotalMoney(double totalMoney) {
-		this.totalMoney = totalMoney;
-	}
+
 	public String getDate() {
 		return date;
 	}
+
 	public void setDate(String date) {
 		this.date = date;
 	}
-	
+
+	public String getNameProducts() {
+		return nameProducts;
+	}
+
+	public void setNameProducts(String nameProducts) {
+		this.nameProducts = nameProducts;
+	}
 }

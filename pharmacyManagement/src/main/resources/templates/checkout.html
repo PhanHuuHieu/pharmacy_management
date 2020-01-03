@@ -25,6 +25,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!--animation-effect-->
 <link th:href="@{/css/animate.min.css}" rel="stylesheet"> 
 <script th:src="@{/js/wow.min.js}"></script>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js}"></script>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js}"></script>
 <script>
  new WOW().init();
 </script>
@@ -68,6 +70,48 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!--//end-smooth-scrolling-->
 </head>
 <body>
+	<div id="chatx">
+		<a href="#" onclick="displayChatBot()" style="font-size:60px; z-index:20; position: fixed; margin-right:35px; margin-bottom:20px; bottom: 0; right: 0;"><span class="fa fa-commenting"></span></a>
+	</div>
+	<div id="username-page" style="display: none;">
+		<div class="username-page-container">
+			<button style="float:right;" onclick="closeUserPage()"><span class="glyphicon glyphicon-remove"></span></button>
+			<h1 class="title-chat">Nhập tên của bạn</h1>
+			<form id="usernameForm" name="usernameForm" style="margin:0 10px 0 10px;">
+				<div class="form-group">
+					<input type="text" id="name" placeholder="Username"
+						autocomplete="off" class="form-control-chat" />
+				</div>
+				<div class="form-group">
+					<button type="submit" class="accent btn-chat username-submit">Bắt đầu chat</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div id="chat-page" class="hidden">
+		<div class="chat-container">
+			<button style="float:right;" onclick="closeChatPage()"><span class="glyphicon glyphicon-remove"></span></button>
+			<div class="chat-header">
+				<h2>HT-Pharmacy Chat</h2>
+			</div>
+			<ul id="messageArea">
+
+			</ul>
+			<form id="messageForm" name="messageForm" nameForm="messageForm">
+				<div class="form-group">
+					<div class="input-group clearfix">
+						<input type="text" id="message" placeholder="Type a message..."
+							autocomplete="off" class="form-control-chat" />
+						<button type="submit" class="primary btn-chat">Send</button>
+						<a th:if="${QL == 1}" href="#" id="txtCheck" onclick="checkChat()">Kiểm tra</a>
+					</div>
+					
+				</div>
+			</form>
+			
+		</div>
+	</div>
+	<script th:src="@{/js/chatBot.js}"></script>
 	<!--header-->
 	<div class="header">
 		<div class="top-header navbar navbar-default"><!--header-one-->
@@ -97,14 +141,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					</ul>
 				</div>
 				<div class="nav navbar-nav logo wow zoomIn animated" data-wow-delay=".7s">
-					<h1><a href="index.html">HT <b>Pharmacy</b><span class="tag">Everything for You </span> </a></h1>
+					<h1><a th:href="@{/index}">HT <b>Pharmacy</b><span class="tag">Everything for You </span> </a></h1>
 				</div>
 				<div class="nav navbar-nav navbar-right header-two-right">
-					<div class="header-right my-account">
-						<a href="contact.html"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> CONTACT US</a>						
-					</div>
-					<div class="header-right my-account" style="margin-right:30px;">
-						<a th:href="@{/cart}"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>GIỎ HÀNG</a>
+					<div class="dropdown">
+					  <a href="#" class="btn btn-secondary" id="userNameLogin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					  </a>
+					  <div class="dropdown-menu" style="text-align: center; margin-right:-55px;" >
+					    <a class="dropdown-item" th:href="@{/inforAccount}">Thông tin</a><br>
+					    <a class="dropdown-item" th:href="@{/listOrder}">Đơn mua</a><br>
+					    <form class="dropdown-item" action="#" th:action="@{/j_spring_security_logout}" method="POST">
+				        	<button style="font-size:10px;" type="submit">Đăng xuất</button>
+				    	</form>
+					  </div>
 					</div>
 				</div>
 				<div class="clearfix"> </div>
@@ -122,24 +171,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						</button>
 					</div>
 					<!--navbar-header-->
-					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-						<ul class="nav navbar-nav top-nav-info" id="listProductGroup" >
+					<div style="font-size:15px;" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav top-nav-info">
+							<li><a th:href="@{/index}" class="active">TRANG CHỦ</a></li>
+							<li class="dropdown grid">
+								<a href="#" class="dropdown-toggle list1" data-toggle="dropdown">SẢN PHẨM<b class="caret"></b></a>
+								<ul style="margin-left:37%;" class="dropdown-menu" id="listProductGroup">
+								</ul>
+							</li>
+							<li><a th:href="@{register}">ĐĂNG KÝ</a></li>
+							<li><a th:href="@{/login}">ĐĂNG NHẬP</a></li>
 						</ul> 
-						<div class="clearfix"> </div>
-						<!--//navbar-collapse-->
-						<header class="cd-main-header">
-							<ul class="cd-header-buttons">
-								<li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
-							</ul> <!-- cd-header-buttons -->
-						</header>
 					</div>
 					<!--//navbar-header-->
 				</nav>
-				<div id="cd-search" class="cd-search">
-					<form>
-						<input type="search" placeholder="Search...">
-					</form>
-				</div>
 			</div>
 		</div>
 	</div>
@@ -148,7 +193,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<div class="breadcrumbs">
 		<div class="container">
 			<ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
-				<li><a href="index.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Trang chủ</a></li>
+				<li><a th:href="@{/index}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Trang chủ</a></li>
 				<li class="active">Giỏ hàng</li>
 			</ol>
 		</div>
@@ -165,7 +210,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="col-md-5">
 		</div>
 		<div class="col-md-3 wow fadeInUp animated">
-			<button style="background:#FF5A14; color:#fff; font-size:25px;">Tiến hàng mua hàng</button>
+			<!-- <button style="background:#FF5A14; color:#fff; font-size:25px;">Tiến hàng mua hàng</button> -->
+			<a th:href="@{/purchase}" id="btnPurchase" class="btn btn-success">Tiến hành mua hàng</a>
 		</div>
 		<div class="col-md-4">
 		</div>
@@ -178,21 +224,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="container">
 			<div class="footer-info">
 				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".5s">
-					<h4 class="footer-logo"><a href="index.html">Modern <b>Shoppe</b> <span class="tag">Everything for Kids world </span> </a></h4>
-					<p>© 2019 HT Pharmacy. All rights reserved | Design by <a href="http://w3layouts.com" target="_blank">HT</a></p>
+					<h4 class="footer-logo"><a href="index.html">HT <b>Pharmacy</b> <span class="tag">Everything for you </span> </a></h4>
+					<p>© 2019 HT Pharmacy. All rights reserved | Design by <a th:href="@{/index}" target="_blank">HT</a></p>
 				</div>
 				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".7s">
-					<h3>Popular</h3>
+					<h3>Về chúng tôi</h3>
 					<ul>
-						<li><a href="about.html">About Us</a></li>
-						<li><a href="products.html">new</a></li>
-						<li><a href="contact.html">Contact Us</a></li>
-						<li><a href="faq.html">FAQ</a></li>
+						<li>100% hàng thật</li>
+						<li>Giao hàng free</li>
+						<li>Bao đổi trả</li>
 					</ul>
 				</div>
 				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".9s">
-					<h3>Subscribe</h3>
-					<p>Sign Up Now For More Information <br> About Our Company </p>
+					<h3>Đăng ký</h3>
+					<p>Đăng ký thông tin của bạn dễ dàng liên lạc </p>
 					<form>
 						<input type="text" placeholder="Enter Your Email" required="">
 						<input type="submit" value="Go">
@@ -202,7 +247,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</div>
 		</div>
 	</div>
-	<!--//footer-->	
+	<!--//footer-->
 	<!--search jQuery-->
 	<script th:src="@{/js/main.js}"></script>
 	<!--//search jQuery-->

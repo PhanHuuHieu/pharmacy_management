@@ -19,11 +19,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 <!--js-->
 <script th:src="@{/js/jquery-1.11.1.min.js}"></script>
+<script th:src="@{/js/detailProduct.js}"></script>
 <script th:src="@{/js/modernizr.custom.js}"></script>
 <!--//js-->
 <!--flex slider-->
 <script defer th:src="@{/js/jquery.flexslider.js}"></script>
 <link rel="stylesheet" th:href="@{/css/flexslider1.css}" type="text/css" media="screen" />
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js}"></script>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js}"></script>
 <script>
 // Can also be used with $(document).ready()
 $(window).load(function() {
@@ -45,6 +48,49 @@ $(window).load(function() {
 <script>
  new WOW().init();
 </script>
+<style type="text/css">
+.carousel-control.left, .carousel-control.right {   
+background-image:none !important;
+}
+.carousel-control { 
+color:#fff; 
+top:40%;    
+color:#428BCA;  
+bottom:auto;    
+padding-top:4px;    
+width:30px; 
+height:30px;    
+text-shadow:none;   
+opacity:1;
+}
+.carousel-control:hover {   
+color: #d9534f;
+}
+.carousel-control.right {   
+left:auto;  
+right:-32px;
+}
+.carousel-control.left {    
+right:auto; 
+left:-32px;
+}
+.carousel-indicators {  
+bottom:-30px;
+}
+.carousel-indicators li {   
+border-radius:0;    
+width:10px; 
+height:10px;    
+background:#ccc;    
+border:1px solid #ccc;
+}
+.carousel-indicators .active {  
+width:12px; 
+height:12px;    
+background:#3276b1; 
+border-color:#3276b1;
+}
+</style>
 <!--//animation-effect-->
 <!--start-smooth-scrolling-->
 <script type="text/javascript" th:src="@{/js/move-top.js}"></script>
@@ -58,8 +104,55 @@ $(window).load(function() {
 		});
 </script>
 <!--//end-smooth-scrolling-->
+<meta property="og:url"           content="https://pharmacy-mng.herokuapp.com/" />
+<meta property="og:type"          content="website" />
+<meta property="og:title"         content="HTPharmacy" />
+<meta property="og:description"   content="Website bán thuốc hàng đầu Việt Nam" />
+<meta property="og:image"         content="https://cdn.jiohealth.com/pharmacy/product/P00203C/P00203C_1_s.jpg" />
 </head>
 <body>
+	<div id="chatx">
+		<a href="#" onclick="displayChatBot()" style="font-size:60px; z-index:20; position: fixed; margin-right:35px; margin-bottom:20px; bottom: 0; right: 0;"><span class="fa fa-commenting"></span></a>
+	</div>
+	<div id="username-page" style="display: none;">
+		<div class="username-page-container">
+			<button style="float:right;" onclick="closeUserPage()"><span class="glyphicon glyphicon-remove"></span></button>
+			<h1 class="title-chat">Nhập tên của bạn</h1>
+			<form id="usernameForm" name="usernameForm" style="margin:0 10px 0 10px;">
+				<div class="form-group">
+					<input type="text" id="name" placeholder="Username"
+						autocomplete="off" class="form-control-chat" />
+				</div>
+				<div class="form-group">
+					<button type="submit" class="accent btn-chat username-submit">Bắt đầu chat</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div id="chat-page" class="hidden">
+		<div class="chat-container">
+			<button style="float:right;" onclick="closeChatPage()"><span class="glyphicon glyphicon-remove"></span></button>
+			<div class="chat-header">
+				<h2>HT-Pharmacy Chat</h2>
+			</div>
+			<ul id="messageArea">
+
+			</ul>
+			<form id="messageForm" name="messageForm" nameForm="messageForm">
+				<div class="form-group">
+					<div class="input-group clearfix">
+						<input type="text" id="message" placeholder="Type a message..."
+							autocomplete="off" class="form-control-chat" />
+						<button type="submit" class="primary btn-chat">Send</button>
+						<a th:if="${QL == 1}" href="#" id="txtCheck" onclick="checkChat()">Kiểm tra</a>
+					</div>
+					
+				</div>
+			</form>
+			
+		</div>
+	</div>
+	<script th:src="@{/js/chatBot.js}"></script>
 	<!--header-->
 	<div class="header">
 		<div class="top-header navbar navbar-default"><!--header-one-->
@@ -89,16 +182,26 @@ $(window).load(function() {
 					</ul>
 				</div>
 				<div class="nav navbar-nav logo wow zoomIn animated" data-wow-delay=".7s">
-					<h1><a href="index.html">HT <b>Pharmacy</b><span class="tag">Everything for You </span> </a></h1>
+					<h1><a th:href="@{/index}">HT <b>Pharmacy</b><span class="tag">Everything for You </span> </a></h1>
 				</div>
 				<div class="nav navbar-nav navbar-right header-two-right">
 					<div class="header-right my-account">
-						<a href="contact.html"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> CONTACT US</a>						
+						<div class="dropdown">
+						  <a href="#" class="btn btn-secondary" id="userNameLogin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						  </a>
+						  <div class="dropdown-menu" style="text-align: center; margin-right:-55px;" >
+						    <a class="dropdown-item" th:href="@{/inforAccount}">Thông tin</a><br>
+						    <a class="dropdown-item" th:href="@{/listOrder}">Đơn mua</a><br>
+						    <form class="dropdown-item" action="#" th:action="@{/j_spring_security_logout}" method="POST">
+					        	<button style="font-size:10px;" type="submit">Đăng xuất</button>
+					    	</form>
+						  </div>
+						</div>					
 					</div>
 					<div class="header-right cart">
 						<a href="#"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a>
-						<h4><a href="checkout.html">
-								<span class="simpleCart_total"> $0.00 </span> (<span id="simpleCart_quantity" class="simpleCart_quantity"> 0 </span>) 
+						<h4><a th:href="@{/cart}">
+								<span id="cart_total" class="cart_total">0 đ</span>
 						</a></h4>
 						<div class="cart-box">
 							<p><a href="javascript:;" class="simpleCart_empty">Empty cart</a></p>
@@ -122,11 +225,16 @@ $(window).load(function() {
 						</button>
 					</div>
 					<!--navbar-header-->
-					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-						<ul class="nav navbar-nav top-nav-info" >
-							
-							<li th:each="productGroup : ${productGroups}"><a th:href="@{/detailProduct/{id}(id=${productGroup.id})}" th:utext="${productGroup.product_group_name}"></a></li>
-								
+					<div style="font-size:15px;" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav top-nav-info">
+							<li><a th:href="@{/index}" class="active">TRANG CHỦ</a></li>
+							<li class="dropdown grid">
+								<a href="#" class="dropdown-toggle list1" data-toggle="dropdown">SẢN PHẨM<b class="caret"></b></a>
+								<ul style="margin-left:37%;" class="dropdown-menu" id="listProductGroup">
+								</ul>
+							</li>
+							<li><a th:href="@{/register}">ĐĂNG KÝ</a></li>
+							<li><a th:href="@{/login}">ĐĂNG NHẬP</a></li>
 						</ul> 
 						<div class="clearfix"> </div>
 						<!--//navbar-collapse-->
@@ -140,7 +248,7 @@ $(window).load(function() {
 				</nav>
 				<div id="cd-search" class="cd-search">
 					<form>
-						<input type="search" placeholder="Search...">
+						<input type="search" id="searchNameIndex" placeholder="Search...">
 					</form>
 				</div>
 			</div>
@@ -151,7 +259,7 @@ $(window).load(function() {
 	<div class="breadcrumbs">
 		<div class="container">
 			<ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
-				<li><a href="index.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
+				<li><a th:href="@{/index}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Trang chủ</a></li>
 				<li class="active">Chi tiết sản phẩm</li>
 			</ol>
 		</div>
@@ -167,11 +275,11 @@ $(window).load(function() {
 							<li th:data-thumb="${picture}">
 								<div class="thumb-image"> <img th:src="${picture}" data-imagezoom="true" class="img-responsive" alt=""> </div>
 							</li>
-							<li th:data-thumb="${picture}">
-								 <div class="thumb-image"> <img th:src="${picture}" data-imagezoom="true" class="img-responsive" alt=""> </div>
+							<li th:data-thumb="${picture1}">
+								 <div class="thumb-image"> <img th:src="${picture1}" data-imagezoom="true" class="img-responsive" alt=""> </div>
 							</li>
-							<li th:data-thumb="${picture}">
-							   <div class="thumb-image"> <img th:src="${picture}" data-imagezoom="true" class="img-responsive" alt=""> </div>
+							<li th:data-thumb="${picture2}">
+							   <div class="thumb-image"> <img th:src="${picture2}" data-imagezoom="true" class="img-responsive" alt=""> </div>
 							</li> 
 						</ul>
 					</div>
@@ -179,7 +287,8 @@ $(window).load(function() {
 					<div class="col-md-6 single-top-left simpleCart_shelfItem wow fadeInRight animated" data-wow-delay=".5s">
 					<h3 th:utext="${name}"></h3>
 					<p th:utext="${note}"></p>
-					<h6 class="item_price" th:utext="${price_sell}"></h6>			
+					<h6 class="item_price" th:utext="${price_sell} + ' đ'"></h6>
+					<input type="hidden" id="idPro" th:value="${id}">			
 					<p th:utext="${description}"></p>
 					<div class="row">
 					<div class="col-md-6">
@@ -192,43 +301,96 @@ $(window).load(function() {
 					</div>
 					</div>
 					
-					<div class="clearfix"> </div>
+					<!--<div class="clearfix"> </div>
 					<div class="quantity">
 						<p class="qty"> Số lượng :  </p><input min="1" type="number" value="1" class="item_quantity">
-					</div>
+					</div>-->
 					<div class="btn_form">
-						<a href="#" class="add-cart item_add">MUA HÀNG</a>	
+						<a href="#" class="add-cart item_add" onclick="purcharse()">MUA HÀNG</a>	
+						<a href="#" class="add-cart item_add" onclick="addCart(0,1)">THÊM GIỎ HÀNG</a>
+						 <!-- Load Facebook SDK for JavaScript -->
+						  <div id="fb-root"></div>
+						  <script>(function(d, s, id) {
+						    var js, fjs = d.getElementsByTagName(s)[0];
+						    if (d.getElementById(id)) return;
+						    js = d.createElement(s); js.id = id;
+						    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+						    fjs.parentNode.insertBefore(js, fjs);
+						  }(document, 'script', 'facebook-jssdk'));</script>
+						  <!-- Your share button code -->
+						  <div class="fb-share-button" 
+						    th:data-href="@{https://pharmacy-mng.herokuapp.com/detail/{id}(id=${id})}" 
+						    data-layout="button_count">
+						  </div>
 					</div>
 				</div>
 			   <div class="clearfix"> </div>
 			</div>
+			 <div id="myCarousel" class="carousel slide" data-ride="carousel">
+			  <!-- Indicators -->
+			  <ol class="carousel-indicators">
+			    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+			    <li data-target="#myCarousel" data-slide-to="1"></li>
+			    <li data-target="#myCarousel" data-slide-to="2"></li>
+			  </ol>
 			
-			<!--related-products-->
-			<div class="related-products">
-				<div class="title-info wow fadeInUp animated" data-wow-delay=".5s">
-					<h3 class="title">Sản phẩm<span> liên quan</span></h3>
-				</div>
-				<div class="related-products-info">
-						<div th:each="product : ${listProductRelated}" class="col-md-3 new-grid simpleCart_shelfItem wow flipInY animated" data-wow-delay=".5s">
-						<div class="new-top">
-							<a th:href="@{/detail/{id}(id=${product.id})}"><img th:src="${product.picture}" class="img-responsive" alt=""/></a>
-							<div class="new-text">
-								<ul>
-									<li><a class="item_add" href="">Thêm giỏ hàng</a></li>
-									<li><a href="products.html">Xem chi tiết</a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="new-bottom">
-							<h5 style="height:105px;"><a class="name" th:href="@{/detail/{id}(id=${product.id})}" th:utext="${product.name}"></a></h5>
-							
-							<div class="ofr">
-								<p><span class="item_price" th:utext="${product.price_sell}"></span></p>
-							</div>
-						</div>
-					</div>
-					<div class="clearfix"> </div>
-				</div>
+			  <!-- Wrapper for slides -->
+			  <div class="carousel-inner">
+			    <div class="item active">
+			      <div class="row"> 
+			       <div class="col-md-3" th:each="item1 : ${listItem1}"> 
+			        <div class="thumbnail"> <img th:src="${item1.picture}" alt="Sản phẩm 1"> 
+			         <div class="caption"> 
+			          <a th:href="@{/detail/{id}(id=${item1.id})}" th:utext="${item1.name}"></a> 
+			          <p th:utext="${item1.note}"></p> 
+			          <p><a th:href="@{/detail/{id}(id=${item1.id})}" class="btn btn-primary" th:utext="${item1.price_sell}+' đ'" role="button"></a>
+			          </p> 
+			         </div> 
+			        </div> 
+			       </div> 
+			      </div> 
+			    </div>
+			
+			    <div class="item">
+			      <div class="row"> 
+			       <div class="col-md-3" th:each="item2 : ${listItem2}"> 
+			        <div class="thumbnail"> <img th:src="${item2.picture}" alt="Sản phẩm 1"> 
+			         <div class="caption"> 
+			          <a th:href="@{/detail/{id}(id=${item2.id})}" th:utext="${item2.name}"></a> 
+			          <p th:utext="${item2.note}"></p> 
+			          <p><a th:href="@{/detail/{id}(id=${item2.id})}" class="btn btn-primary" th:utext="${item2.price_sell}+' đ'" role="button"></a>
+			          </p> 
+			         </div> 
+			        </div> 
+			       </div> 
+			      </div> 
+			    </div>
+			
+			    <div class="item">
+			      <div class="row"> 
+			       <div class="col-md-3" th:each="item3 : ${listItem3}"> 
+			        <div class="thumbnail"> <img th:src="${item3.picture}" alt="Sản phẩm 1"> 
+			         <div class="caption"> 
+			          <a th:href="@{/detail/{id}(id=${item3.id})}" th:utext="${item3.name}"></a> 
+			          <p th:utext="${item3.note}"></p> 
+			          <p><a th:href="@{/detail/{id}(id=${item3.id})}" class="btn btn-primary" th:utext="${item3.price_sell}+' đ'" role="button"></a>
+			          </p> 
+			         </div> 
+			        </div> 
+			       </div> 
+			      </div> 
+			    </div>
+			  </div>
+			
+			  <!-- Left and right controls -->
+			  <a class="left carousel-control" style="color:#428BCA;" href="#myCarousel" data-slide="prev">
+			    <span class="glyphicon glyphicon-chevron-left"></span>
+			    <span class="sr-only">Previous</span>
+			  </a>
+			  <a class="right carousel-control" style="color:#428BCA;" href="#myCarousel" data-slide="next">
+			    <span class="glyphicon glyphicon-chevron-right"></span>
+			    <span class="sr-only">Next</span>
+			  </a>
 			</div>
 			<!--//related-products-->
 		</div>
@@ -239,22 +401,20 @@ $(window).load(function() {
 		<div class="container">
 			<div class="footer-info">
 				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".5s">
-					<h4 class="footer-logo"><a href="index.html">Modern <b>Shoppe</b> <span class="tag">Everything for Kids world </span> </a></h4>
-					<p>© 2016 Modern Shoppe . All rights reserved | Design by <a href="http://w3layouts.com" target="_blank">W3layouts</a></p>
+					<h4 class="footer-logo"><a href="index.html">HT <b>Pharmacy</b> <span class="tag">Everything for you </span> </a></h4>
+					<p>© 2019 HT Pharmacy. All rights reserved | Design by <a th:href="@{/index}" target="_blank">HT</a></p>
 				</div>
 				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".7s">
-					<h3>Popular</h3>
+					<h3>Về chúng tôi</h3>
 					<ul>
-						<li><a href="about.html">About Us</a></li>
-						<li><a href="products.html">new</a></li>
-						<li><a href="contact.html">Contact Us</a></li>
-						<li><a href="faq.html">FAQ</a></li>
-						<li><a href="checkout.html">Wishlist</a></li>
+						<li>100% hàng thật</li>
+						<li>Giao hàng free</li>
+						<li>Bao đổi trả</li>
 					</ul>
 				</div>
 				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".9s">
-					<h3>Subscribe</h3>
-					<p>Sign Up Now For More Information <br> About Our Company </p>
+					<h3>Đăng ký</h3>
+					<p>Đăng ký thông tin của bạn dễ dàng liên lạc </p>
 					<form>
 						<input type="text" placeholder="Enter Your Email" required="">
 						<input type="submit" value="Go">
@@ -264,7 +424,7 @@ $(window).load(function() {
 			</div>
 		</div>
 	</div>
-	<!--//footer-->			
+	<!--//footer-->		
 	<!--search jQuery-->
 	<script th:src="@{/js/main.js}"></script>
 	<!--//search jQuery-->

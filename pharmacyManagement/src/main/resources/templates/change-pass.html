@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+<title>HT-Pharmacy</title>
+<!-- for-mobile-apps -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Modern Shoppe Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+		function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!--//for-mobile-apps -->
+<link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css}">
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
+<script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<link th:href="@{/css/styleweb.css}" rel="stylesheet" type="text/css" media="all" />
+<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+
+<!--js-->
+<script th:src="@{/js/jquery-1.11.1.min.js}"></script>
+<script th:src="@{/js/modernizr.custom.js}"></script>
+<!--//js-->
+<!--flex slider-->
+<script defer th:src="@{/js/jquery.flexslider.js}"></script>
+<link rel="stylesheet" th:href="@{/css/flexslider1.css}" type="text/css" media="screen" />
+<script>
+// Can also be used with $(document).ready()
+$(window).load(function() {
+  $('.flexslider').flexslider({
+    animation: "slide",
+    controlNav: "thumbnails"
+  });
+});
+</script>
+<!--flex slider-->
+<script th:src="@{/js/imagezoom.js}"></script>
+<!--cart-->
+<script th:src="@{/js/simpleCart.min.js}"></script>
+<!--cart-->
+<!--web-fonts-->
+<!--animation-effect-->
+<link th:href="@{/css/animate.min.css}" rel="stylesheet"> 
+<script th:src="@{/js/wow.min.js}"></script>
+<script>
+ new WOW().init();
+</script>
+<!--//animation-effect-->
+<!--start-smooth-scrolling-->
+<script type="text/javascript" th:src="@{/js/move-top.js}"></script>
+<script type="text/javascript" th:src="@{/js/easing.js}"></script>	
+<script type="text/javascript">
+		jQuery(document).ready(function($) {
+			$(".scroll").click(function(event){		
+				event.preventDefault();
+				$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+			});
+		});
+		function validatePassword() {
+			var password = $("#password").val();
+			var re_password = $("#re_password").val();
+			if(password.length < 9)
+			{
+				$("#error").text("Password cần lớn hơn 8 kí tự!");
+			}
+			else
+			{
+				$("#error").text("");
+			}
+		}
+		function validateRePassword() {
+			var password = $("#password").val();
+			var re_password = $("#re_password").val();
+			if(password != re_password)
+			{
+				$("#error").text("Mật khẩu nhập lại không đúng!");
+			}
+			else
+			{
+				$("#error").text("");
+				$("#btnSubmit").prop( "disabled", false );
+			}
+		}
+</script>
+<!--//end-smooth-scrolling-->
+</head>
+<body>
+	<div class="header">
+		<div class="top-header navbar navbar-default"><!--header-one-->
+			<div class="container">
+				<div class="nav navbar-nav wow fadeInLeft animated" data-wow-delay=".5s">
+					<p>Welcome to HT-Pharmacy <a th:href="@{/register}">Register </a> Or <a th:href="@{/login}">Sign In </a></p>
+				</div>
+				<div class="nav navbar-nav navbar-right social-icons wow fadeInRight animated" data-wow-delay=".5s">
+					<ul>
+						<li><a href="#"> </a></li>
+						<li><a href="#" class="pin"> </a></li>
+						<li><a href="#" class="in"> </a></li>
+						<li><a href="#" class="be"> </a></li>
+						<li><a href="#" class="you"> </a></li>
+						<li><a href="#" class="vimeo"> </a></li>
+					</ul>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+		</div>
+		<div class="header-two navbar navbar-default"><!--header-two-->
+			<div class="container">
+				<div class="nav navbar-nav header-two-left">
+					<ul>
+						<li><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i>+967 539 819</li>
+						<li><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i><a href="mailto:info@example.com">quangthu1911@gmail.com</a></li>			
+					</ul>
+				</div>
+				<div class="nav navbar-nav logo wow zoomIn animated" data-wow-delay=".7s">
+					<h1><a th:href="@{/index}">HT <b>Pharmacy</b><span class="tag">Everything for You </span> </a></h1>
+				</div>
+				<div class="nav navbar-nav navbar-right header-two-right">
+					<div class="header-right my-account">
+					    <div class="dropdown">
+						  <a href="#" class="btn btn-secondary" id="userNameLogin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						  </a>
+						  <div class="dropdown-menu" style="text-align: center; margin-right:-85px;" >
+						    <a class="dropdown-item" href="#">Thông tin</a><br>
+						    <a class="dropdown-item" th:href="@{/listOrder}">Đơn mua</a><br>
+						    <form class="dropdown-item" action="#" th:action="@{/j_spring_security_logout}" method="POST">
+					        	<button style="font-size:10px;" type="submit">Đăng xuất</button>
+					    	</form>
+						  </div>
+						</div>
+					    <br>
+					    <a th:href="@{/product}" th:if="${QL == 1}" style="color:red;">Vào trang Quản Lý</a>
+						
+					</div>
+					<!--  <div class="header-right my-account" style="margin-right:30px;">
+						<a th:href="@{/cart}"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>GIỎ HÀNG</a>
+					</div>-->
+					<div class="header-right cart">
+					</div>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+		</div>
+	</div>
+	<!--//header-->
+	<!--breadcrumbs-->
+	<div class="breadcrumbs">
+		<div class="container">
+			<ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
+				<li><a th:href="@{/login}">Đăng nhập</a></li>
+				<li class="active">Thay đổi password</li>
+			</ol>
+		</div>
+	</div>
+	<!--//breadcrumbs-->
+	<!--Main-->
+	<div class="row" style="margin:50px 0 50px 0;">
+		<div class="col-md-4"></div>
+		<div class="col-md-4">
+			<div class="form-body">
+				<p id="error" style="color:red;"></p>
+				<form th:action="@{/getNewPassword}" th:object="${registerForm}" method="POST"> 
+					<div class="form-group">
+						<label>Nhập password mới</label>
+						<input type="password" onkeyup="validatePassword()" id="password" class="form-control" th:field="*{password}">
+					</div>
+					<div class="form-group">
+						<label>Nhập lại password</label>
+						<input type="password" onkeyup="validateRePassword()" id="re_password" class="form-control" th:field="*{re_password}">
+					</div>
+					<button type="submit" disabled="disabled" id="btnSubmit" class="btn btn-primary">Đổi password</button> 
+				</form> 
+			</div>
+		</div>
+		<div class="col-md-4"></div>
+	</div>
+	
+	<!--//Main-->
+	<!--footer-->
+	<div class="footer">
+		<div class="container">
+			<div class="footer-info">
+				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".5s">
+					<h4 class="footer-logo"><a href="index.html">HT <b>Pharmacy</b> <span class="tag">Everything for you </span> </a></h4>
+					<p>© 2019 HT Pharmacy. All rights reserved | Design by <a th:href="@{/index}" target="_blank">HT</a></p>
+				</div>
+				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".7s">
+					<h3>Về chúng tôi</h3>
+					<ul>
+						<li>100% hàng thật</li>
+						<li>Giao hàng free</li>
+						<li>Bao đổi trả</li>
+					</ul>
+				</div>
+				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".9s">
+					<h3>Đăng ký</h3>
+					<p>Đăng ký thông tin của bạn dễ dàng liên lạc </p>
+					<form>
+						<input type="text" placeholder="Enter Your Email" required="">
+						<input type="submit" value="Go">
+					</form>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<!--//footer-->
+	<!--search jQuery-->
+	<script th:src="@{/js/main.js}"></script>
+	<!--//search jQuery-->
+	<!--smooth-scrolling-of-move-up-->
+	<script type="text/javascript">
+		$(document).ready(function() {
+		
+			var defaults = {
+				containerID: 'toTop', // fading element id
+				containerHoverID: 'toTopHover', // fading element hover id
+				scrollSpeed: 1200,
+				easingType: 'linear' 
+			};
+			
+			$().UItoTop({ easingType: 'easeOutQuart' });
+			
+		});
+	</script>
+	<!--//smooth-scrolling-of-move-up-->
+	<!--Bootstrap core JavaScript
+    ================================================== -->
+    <!--Placed at the end of the document so the pages load faster -->
+    <script src="js/bootstrap.js"></script>
+</body>
+</html>

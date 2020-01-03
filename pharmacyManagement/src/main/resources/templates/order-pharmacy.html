@@ -16,6 +16,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
 <script th:src="@{/js/jquery-1.11.1.min.js}"></script>
 <script th:src="@{/js/modernizr.custom.js}"></script>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js}"></script>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js}"></script>
 <!--//js-->
 <!--cart-->
 <script th:src="@{/js/simpleCart.min.js}"></script>
@@ -28,6 +30,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script>
  new WOW().init();
 </script>
+<style>
+    /* Set the size of the div element that contains the map */
+   #map {
+     height: 300px;  /* The height is 400 pixels */
+     width: 100%;  /* The width is the width of the web page */
+    }
+ </style>
 <!--//animation-effect-->
 <!--close-button-->
 <script>$(document).ready(function(c) {
@@ -68,6 +77,48 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!--//end-smooth-scrolling-->
 </head>
 <body>
+	<div id="chatx">
+		<a href="#" onclick="displayChatBot()" style="font-size:60px; z-index:20; position: fixed; margin-right:35px; margin-bottom:20px; bottom: 0; right: 0;"><span class="fa fa-commenting"></span></a>
+	</div>
+	<div id="username-page" style="display: none;">
+		<div class="username-page-container">
+			<button style="float:right;" onclick="closeUserPage()"><span class="glyphicon glyphicon-remove"></span></button>
+			<h1 class="title-chat">Nhập tên của bạn</h1>
+			<form id="usernameForm" name="usernameForm" style="margin:0 10px 0 10px;">
+				<div class="form-group">
+					<input type="text" id="name" placeholder="Username"
+						autocomplete="off" class="form-control-chat" />
+				</div>
+				<div class="form-group">
+					<button type="submit" class="accent btn-chat username-submit">Bắt đầu chat</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div id="chat-page" class="hidden">
+		<div class="chat-container">
+			<button style="float:right;" onclick="closeChatPage()"><span class="glyphicon glyphicon-remove"></span></button>
+			<div class="chat-header">
+				<h2>HT-Pharmacy Chat</h2>
+			</div>
+			<ul id="messageArea">
+
+			</ul>
+			<form id="messageForm" name="messageForm" nameForm="messageForm">
+				<div class="form-group">
+					<div class="input-group clearfix">
+						<input type="text" id="message" placeholder="Type a message..."
+							autocomplete="off" class="form-control-chat" />
+						<button type="submit" class="primary btn-chat">Send</button>
+						<a th:if="${QL == 1}" href="#" id="txtCheck" onclick="checkChat()">Kiểm tra</a>
+					</div>
+					
+				</div>
+			</form>
+			
+		</div>
+	</div>
+	<script th:src="@{/js/chatBot.js}"></script>
 	<!--header-->
 	<div class="header">
 		<div class="top-header navbar navbar-default"><!--header-one-->
@@ -97,14 +148,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					</ul>
 				</div>
 				<div class="nav navbar-nav logo wow zoomIn animated" data-wow-delay=".7s">
-					<h1><a href="index.html">HT <b>Pharmacy</b><span class="tag">Everything for You </span> </a></h1>
+					<h1><a th:href="@{/index}">HT <b>Pharmacy</b><span class="tag">Everything for You </span> </a></h1>
 				</div>
 				<div class="nav navbar-nav navbar-right header-two-right">
 					<div class="header-right my-account">
-						<a href="contact.html"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> CONTACT US</a>						
-					</div>
-					<div class="header-right my-account" style="margin-right:30px;">
-						<a th:href="@{/cart}"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>GIỎ HÀNG</a>
+						<div class="dropdown">
+						  <a href="#" class="btn btn-secondary" id="userNameLogin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						  </a>
+						  <div class="dropdown-menu" style="text-align: center; margin-right:-55px;" >
+						    <a class="dropdown-item" th:href="@{/inforAccount}">Thông tin</a><br>
+						    <a class="dropdown-item" th:href="@{/listOrder}">Đơn mua</a><br>
+						    <form class="dropdown-item" action="#" th:action="@{/j_spring_security_logout}" method="POST">
+					        	<button style="font-size:10px;" type="submit">Đăng xuất</button>
+					    	</form>
+						  </div>
+						</div>						
 					</div>
 				</div>
 				<div class="clearfix"> </div>
@@ -121,25 +179,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<span class="icon-bar"></span>
 						</button>
 					</div>
-					<!--navbar-header-->
-					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-						<ul class="nav navbar-nav top-nav-info" id="listProductGroup" >
-						</ul> 
-						<div class="clearfix"> </div>
-						<!--//navbar-collapse-->
-						<header class="cd-main-header">
-							<ul class="cd-header-buttons">
-								<li><a class="cd-search-trigger" href="#cd-search"> <span></span></a></li>
-							</ul> <!-- cd-header-buttons -->
-						</header>
-					</div>
-					<!--//navbar-header-->
 				</nav>
-				<div id="cd-search" class="cd-search">
-					<form>
-						<input type="search" placeholder="Search...">
-					</form>
-				</div>
 			</div>
 		</div>
 	</div>
@@ -148,24 +188,35 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<div class="breadcrumbs">
 		<div class="container">
 			<ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
-				<li><a href="index.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Trang chủ</a></li>
+				<li><a th:href="@{/index}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Trang chủ</a></li>
 				<li class="active">Giỏ hàng</li>
 			</ol>
 		</div>
 	</div>
 	<!--//breadcrumbs-->
 	<!--Short codes-->
+	<form th:object="${objAddress}" th:action="@{gotoPurchase}" id="purchase" method="post">
 	<div class="codes" style="background:#F5F5F5">
 		<div class="container" style="background:#FFFFFF ">
 			<div class="address-customer">
 				<h4 style="color: #FF5A10; margin-top: 20px; margin-bottom: 20px;"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>  Địa chỉ nhận hàng</h4> 
+				<p id="error_message" style="color:red;"></p>
 				<div class="row wow fadeInDown animated" data-wow-delay=".5s">
+					
 						<div class="col-md-4 in-gp-tl">
+							<div class="input-group">
+								<span class="input-group-addon">
+									<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+								</span>
+								<input type="text" id="namedeli" th:field="*{name}" class="form-control" placeholder="Tên người nhận">
+							</div><!-- /input-group -->
+						</div><!-- /.col-lg-6 -->
+						<div class="col-md-4 in-gp-tb">
 							<div class="input-group">
 								<span class="input-group-addon">
 									<span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span>
 								</span>
-								<input type="text" class="form-control" placeholder="Tên người nhận">
+								<input type="text" id="phone_number" th:field="*{phone_number}" class="form-control" placeholder="Số điện thoại">
 							</div><!-- /input-group -->
 						</div><!-- /.col-lg-6 -->
 						<div class="col-md-4 in-gp-tb">
@@ -173,20 +224,27 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<span class="input-group-addon">
 									<span class="glyphicon glyphicon-send" aria-hidden="true"></span>
 								</span>
-								<input type="text" class="form-control" placeholder="Số điện thoại">
+								<input type="text" id="address_detail" onkeyup="displayWhenKeyUp()" th:field="*{address_detail}" class="form-control" placeholder="Địa chỉ">
 							</div><!-- /input-group -->
 						</div><!-- /.col-lg-6 -->
-						<div class="col-md-4 in-gp-tb">
-							<div class="input-group">
-								<span class="input-group-addon">
-									<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-								</span>
-								<input type="text" class="form-control" placeholder="Địa chỉ">
-							</div><!-- /input-group -->
-						</div><!-- /.col-lg-6 -->
+					
 				</div><!-- /.row -->
 			</div>
+			<!-- Map -->
+			<!--  <div id="map"></div>
+		    <script async defer
+		    th:src="@{https://maps.googleapis.com/maps/api/js?key=AIzaSyAoGgtWW7fC6R7e23uvFNjSXskpGAfqAT0}">
+		    </script>-->
+		    <div class="mapouter">
+		    	<div class="gmap_canvas" id="mapx">
+		    		
+		    	</div>
+		    	<style>.mapouter{position:relative;height:430px;}.gmap_canvas {overflow:hidden;background:none!important;height:400px;}
+		    	</style>
+		    </div>
+			<!-- //Map -->
 		</div>
+		
 		<div class="container" style="background:#FFFFFF; margin-top: 20px;">
 				<div class="address-customer">
 					<h3>Sản phẩm</h3>
@@ -203,13 +261,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td><img src="images/1.jpg" class="img-thumbnail" width="60" height="60"></td>
-									<td>Thuốc chống dị ứng dạng tuýp 20mg</td>
-									<td>Xanh</td>
-									<td>15.000đ</td>
-									<td>2</td>
-									<td>30.000đ</td>
+								<tr th:each="order : ${listOrder}">
+									<td><img th:src="${order.picture}" class="img-thumbnail" width="60" height="60"></td>
+									<td th:text="${order.name}"></td>
+									<td th:text="${order.color}"></td>
+									<td th:text="${order.price_sell}"></td>
+									<td th:text="${order.amount}"></td>
+									<td th:text="${order.product_price}"></td>
 								</tr>
 							</tbody>
 						</table>
@@ -217,12 +275,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				</div>
 			<!--delivery-->
 			<div class="delivery-customer row" style="background: #FAFDFF; border-top: 0.5px dotted green;">
-				<div class="col-md-5">
+				<div class="col-md-1">
+					<input style="margin-top:10px;" type="button" onclick="barcodeClick()" class="btn btn-warning" value="Quét mã">
+				</div>
+				<div class="col-md-1">
+					<input style="margin-top:15px;" type="text" id="barcode">
+					<input style="margin-top:15px;" type="hidden">
+				</div>
+				<div class="col-md-3">
 				</div>
 				<div class="col-md-7 row">
 					<div class="col-md-3"><p>Đơn vị vận chuyển:</p></div>
-					<div class="col-md-4"><h4><b>Vận chuyển nhanh</b></h4><p><i>Nhận hàng vào 26 Th 11</i></p></div>
-					<div class="col-md-5"><p>Thanh toán khi nhận hàng<p></div>
+					<div class="col-md-4"><h4><b>Vận chuyển nhanh</b></h4><p><i th:utext="${dateHasProduct}"></i></p></div>
+					<div class="col-md-2"><input type="checkbox" id="checkPoint"><p>Tích điểm</p></div>
+					<div class="col-md-3">
+						<select style="margin-top:10px;" th:field="*{status_pay}">
+						  <option value="1">Thanh toán khi nhận hàng</option>
+						  <option value="2">Thanh toán với paypal</option>
+						</select>
+					</div>
 				</div>
 			</div>
 			<!--//delivery-->
@@ -232,7 +303,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				</div>
 				<div class="col-md-4 row">
 					<div class="col-md-7"><p>Tổng số tiền:</p></div>
-					<div class="col-md-5"><h3>41.000đ</h3></div>
+					<div class="col-md-5"><h3 th:text="${total_money}+ đ"></h3></div>
+					<input type="hidden" value="xc" th:field="*{total_money}">
 				</div>
 			</div>
 			<!--//bill-->
@@ -242,32 +314,33 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="col-md-9">
 			</div>
 			<div class="col-md-2" >
-				<a href="#" class="btn btn-warning" style="font-size: 20px;">ĐẶT HÀNG</a>
+				<input type="submit" class="btn btn-warning" value="ĐẶT HÀNG">
+				<!-- <a href="#" class="btn btn-warning" style="font-size: 20px;">ĐẶT HÀNG</a> -->
 			</div>
 		</div>
 		<!--//button-->
 	</div>
+	</form>
 	<!--//short-codes-->
 	<!--footer-->
 	<div class="footer">
 		<div class="container">
 			<div class="footer-info">
 				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".5s">
-					<h4 class="footer-logo"><a href="index.html">Modern <b>Shoppe</b> <span class="tag">Everything for Kids world </span> </a></h4>
-					<p>© 2019 HT Pharmacy. All rights reserved | Design by <a href="http://w3layouts.com" target="_blank">HT</a></p>
+					<h4 class="footer-logo"><a href="index.html">HT <b>Pharmacy</b> <span class="tag">Everything for you </span> </a></h4>
+					<p>© 2019 HT Pharmacy. All rights reserved | Design by <a th:href="@{/index}" target="_blank">HT</a></p>
 				</div>
 				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".7s">
-					<h3>Popular</h3>
+					<h3>Về chúng tôi</h3>
 					<ul>
-						<li><a href="about.html">About Us</a></li>
-						<li><a href="products.html">new</a></li>
-						<li><a href="contact.html">Contact Us</a></li>
-						<li><a href="faq.html">FAQ</a></li>
+						<li>100% hàng thật</li>
+						<li>Giao hàng free</li>
+						<li>Bao đổi trả</li>
 					</ul>
 				</div>
 				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".9s">
-					<h3>Subscribe</h3>
-					<p>Sign Up Now For More Information <br> About Our Company </p>
+					<h3>Đăng ký</h3>
+					<p>Đăng ký thông tin của bạn dễ dàng liên lạc </p>
 					<form>
 						<input type="text" placeholder="Enter Your Email" required="">
 						<input type="submit" value="Go">
@@ -277,7 +350,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</div>
 		</div>
 	</div>
-	<!--//footer-->	
+	<!--//footer-->
 	<!--search jQuery-->
 	<script th:src="@{/js/main.js}"></script>
 	<!--//search jQuery-->

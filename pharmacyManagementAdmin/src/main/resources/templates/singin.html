@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+<title>HT-Pharmacy</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link th:href="@{/css/style.css}" rel='stylesheet' type='text/css' />
+<link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css}">
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
+<script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<link th:href="@{/css/SidebarNav.min.css}" media='all' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" charset="utf8" th:src="@{http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js}"></script>
+<script type="text/javascript" charset="utf8" th:src="@{http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js}"></script>
+<link th:href="@{/css/custom.css}" rel="stylesheet">
+</head> 
+<body class="cbp-spmenu-push">
+	<div class="main-page login-page ">
+		<h2 class="title1">ĐĂNG NHẬP</h2>
+		<div class="login-body" style="border-style: double;">
+			<form th:action="@{/j_spring_security_login}" method="post">
+				<input type="text" class="form-control" name="username" placeholder="Enter Your Username">
+				<br>
+				<input type="password" name="password" class="form-control" placeholder="Enter Your Password">
+				<input type="submit" name="Sign In" value="ĐĂNG NHẬP">
+			</form>
+		</div>
+	</div>
+</body>
+</html>

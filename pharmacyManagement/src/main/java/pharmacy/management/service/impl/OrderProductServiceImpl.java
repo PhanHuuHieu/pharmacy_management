@@ -1,25 +1,21 @@
 package pharmacy.management.service.impl;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pharmacy.management.bean.CartBean;
-import pharmacy.management.bean.OrderBean;
-import pharmacy.management.bean.ProductBean;
+import pharmacy.management.bean.OrderProductBean;
+import pharmacy.management.bean.OrderCustomerBean;
 import pharmacy.management.bean.ReponseBean;
 import pharmacy.management.bean.ReportOrderProduct;
-import pharmacy.management.entity.TProduct;
-import pharmacy.management.entity.TProductGroup;
+import pharmacy.management.entity.TOrderProduct;
 import pharmacy.management.form.OrderProductForm;
 import pharmacy.management.form.OrderReportForm;
-import pharmacy.management.form.ProductForm;
 import pharmacy.management.respository.OrderProductRepository;
-import pharmacy.management.respository.ProductRepository;
 import pharmacy.management.service.OrderProductService;
-import pharmacy.management.service.ProductService;
+
 @Service
 public class OrderProductServiceImpl implements OrderProductService {
 
@@ -27,12 +23,12 @@ public class OrderProductServiceImpl implements OrderProductService {
 	private OrderProductRepository orderproductRepository;
 
 	@Override
-	public List<OrderBean> getListSearchOrderProduct(OrderProductForm orderProductForm) {
+	public List<OrderProductBean> getListSearchOrderProduct(OrderProductForm orderProductForm) {
 		return orderproductRepository.getListSearchOrderProduct(orderProductForm);
 	}
 
 	@Override
-	public List<OrderBean> findListReportOrderProduct(OrderReportForm orderProductForm) {
+	public List<OrderProductBean> findListReportOrderProduct(OrderReportForm orderProductForm) {
 		return orderproductRepository.findListReportOrderProduct(orderProductForm);
 	}
 
@@ -42,13 +38,13 @@ public class OrderProductServiceImpl implements OrderProductService {
 	}
 
 	@Override
-	public void getListNameGroupProduct(String month,List<ReponseBean> listData) {
-		orderproductRepository.getListNameGroupProduct(month,listData);
+	public void getListNameGroupProduct(String month, List<ReponseBean> listData) {
+		orderproductRepository.getListNameGroupProduct(month, listData);
 	}
 
 	@Override
-	public void getSumAmountListNameGroupProduct(String month,List<ReponseBean> listData) {
-		orderproductRepository.getSumAmountListNameGroupProduct(month,listData);
+	public void getSumAmountListNameGroupProduct(String month, List<ReponseBean> listData) {
+		orderproductRepository.getSumAmountListNameGroupProduct(month, listData);
 	}
 
 	@Override
@@ -82,8 +78,8 @@ public class OrderProductServiceImpl implements OrderProductService {
 	}
 
 	@Override
-	public List<CartBean> getListCart(String idLogin) {
-		return orderproductRepository.getListCart(idLogin);
+	public List<CartBean> getListCart(String idLogin, int status) {
+		return orderproductRepository.getListCart(idLogin, status);
 	}
 
 	@Override
@@ -97,8 +93,8 @@ public class OrderProductServiceImpl implements OrderProductService {
 	}
 
 	@Override
-	public void updateMoneyCart(String idOrder,String id) {
-		orderproductRepository.updateMoneyCart(idOrder,id);
+	public void updateMoneyCart(String idOrder, String id, int amount, double price) {
+		orderproductRepository.updateMoneyCart(idOrder, id, amount, price);
 	}
 
 	@Override
@@ -111,5 +107,39 @@ public class OrderProductServiceImpl implements OrderProductService {
 		return orderproductRepository.insertOrderCart(idLogin);
 	}
 
-	
+	@Override
+	public void updateStatusOrder(String idLogin, String status) {
+		orderproductRepository.updateStatusOrder(idLogin, status);
+	}
+
+	@Override
+	public List<TOrderProduct> getTotalMoney(String idLogin) {
+		return orderproductRepository.getTotalMoney(idLogin);
+	}
+
+	@Override
+	public void updateStatusPayment(String idOrder) {
+		orderproductRepository.updateStatusPayment(idOrder);
+	}
+
+	@Override
+	public List<OrderCustomerBean> getListOrderCustomer(String idLogin) {
+		return orderproductRepository.getListOrderCustomer(idLogin);
+	}
+
+	@Override
+	public List<String> getListOrderProduct(String idLogin) {
+		return orderproductRepository.getListOrderProduct(idLogin);
+	}
+
+	@Override
+	public List<OrderCustomerBean> getOrderDetail(String idOrder) {
+		return orderproductRepository.getOrderDetail(idOrder);
+	}
+
+	@Override
+	public void updateStatusOrderAdmin(OrderCustomerBean orderCustomerBean) {
+		orderproductRepository.updateStatusOrderAdmin(orderCustomerBean);
+	}
+
 }

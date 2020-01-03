@@ -22,11 +22,10 @@
 <!--cart-->
 <script th:src="@{/js/simpleCart.min.js}"></script>
 <script th:src="@{/js/index.js}"></script>
+
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js}"></script>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js}"></script>
 <!--cart-->
-<!--web-fonts
-<link href='//fonts.googleapis.com/css?family=Raleway:400,100,100italic,200,200italic,300,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic' rel='stylesheet' type='text/css'><link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
-<link href='//fonts.googleapis.com/css?family=Pompiere' rel='stylesheet' type='text/css'>
-<link href='//fonts.googleapis.com/css?family=Fascinate' rel='stylesheet' type='text/css'>-->
 <!--web-fonts-->
 <!--animation-effect-->
 <link th:href="@{/css/animate.min.css}" rel="stylesheet"> 
@@ -45,75 +44,61 @@
 				$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
 			});
 		});
+		
 </script>
 <style>
-.cart_total {
- 
-  background-color: #004A7F;
- 
-  -webkit-border-radius: 10px;
- 
-  border-radius: 10px;
-   
-  border: none;
-   
-  color: #FFFFFF;
-   
-  cursor: pointer;
-   
-  display: inline-block;
-   
-  font-family: Arial;
-   
-  font-size: 15px;
-   
-  padding: 5px 10px;
-   
-  text-align: center;
-   
-  text-decoration: none;
- 
-}
-@-webkit-keyframes glowing {
-  0% { background-color: #004A7F; -webkit-box-shadow: 0 0 3px #004A7F; }
-  50% { background-color: #0094FF; -webkit-box-shadow: 0 0 10px #0094FF; }
-  100% { background-color: #004A7F; -webkit-box-shadow: 0 0 3px #004A7F; }
-}
- 
-@-moz-keyframes glowing {
-  0% { background-color: #004A7F; -moz-box-shadow: 0 0 3px #004A7F; }
-  50% { background-color: #0094FF; -moz-box-shadow: 0 0 10px #0094FF; }
-  100% { background-color: #004A7F; -moz-box-shadow: 0 0 3px #004A7F; }
-}
- 
-@-o-keyframes glowing {
-  0% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
-  50% { background-color: #0094FF; box-shadow: 0 0 10px #0094FF; }
-  100% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
-}
- 
-@keyframes glowing {
-  0% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
-  50% { background-color: #0094FF; box-shadow: 0 0 10px #0094FF; }
-  100% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
-}
- 
-.cart_total {
-  -webkit-animation: glowing 1500ms infinite;
-  -moz-animation: glowing 1500ms infinite;
-  -o-animation: glowing 1500ms infinite;
-  animation: glowing 1500ms infinite;
-}
 </style>
 <!--//end-smooth-scrolling-->
 </head>
 <body>
-	<!--header-->
+    <div id="chatx">
+		<a href="#" onclick="displayChatBot()" style="font-size:60px; z-index:20; position: fixed; margin-right:35px; margin-bottom:20px; bottom: 0; right: 0;"><span class="fa fa-commenting"></span></a>
+	</div>
+	<div id="username-page" style="display: none;">
+		<div class="username-page-container">
+			<button style="float:right;" onclick="closeUserPage()"><span class="glyphicon glyphicon-remove"></span></button>
+			<h1 class="title-chat">Nhập tên của bạn</h1>
+			<form id="usernameForm" name="usernameForm" style="margin:0 10px 0 10px;">
+				<div class="form-group">
+					<input type="text" id="name" placeholder="Username"
+						autocomplete="off" class="form-control-chat" />
+				</div>
+				<div class="form-group">
+					<button type="submit" class="accent btn-chat username-submit">Bắt đầu chat</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div id="chat-page" class="hidden">
+		<div class="chat-container">
+			<button style="float:right;" onclick="closeChatPage()"><span class="glyphicon glyphicon-remove"></span></button>
+			<div class="chat-header">
+				<h2>HT-Pharmacy Chat</h2>
+			</div>
+			<ul id="messageArea">
+
+			</ul>
+			<form id="messageForm" name="messageForm" nameForm="messageForm">
+				<div class="form-group">
+					<div class="input-group clearfix">
+						<input type="text" id="message" placeholder="Type a message..."
+							autocomplete="off" class="form-control-chat" />
+						<button type="submit" class="primary btn-chat">Send</button>
+						<a th:if="${QL == 1}" href="#" id="txtCheck" onclick="checkChat()">Kiểm tra</a>
+					</div>
+					
+				</div>
+			</form>
+			
+		</div>
+	</div>
+	<script th:src="@{/js/chatBot.js}"></script>
+	<!-- //CHATBOT -->
 	<div class="header">
 		<div class="top-header navbar navbar-default"><!--header-one-->
 			<div class="container">
 				<div class="nav navbar-nav wow fadeInLeft animated" data-wow-delay=".5s">
-					<p>Welcome to HT-Pharmacy <a href="register.html">Register </a> Or <a href="signin.html">Sign In </a></p>
+					<p>Welcome to HT-Pharmacy <a th:href="@{/register}">Register </a> Or <a th:href="@{/login}">Sign In </a></p>
 				</div>
 				<div class="nav navbar-nav navbar-right social-icons wow fadeInRight animated" data-wow-delay=".5s">
 					<ul>
@@ -137,11 +122,23 @@
 					</ul>
 				</div>
 				<div class="nav navbar-nav logo wow zoomIn animated" data-wow-delay=".7s">
-					<h1><a href="index.html">HT <b>Pharmacy</b><span class="tag">Everything for You </span> </a></h1>
+					<h1><a th:href="@{/index}">HT <b>Pharmacy</b><span class="tag">Everything for You </span> </a></h1>
 				</div>
 				<div class="nav navbar-nav navbar-right header-two-right">
 					<div class="header-right my-account">
-						<a href="contact.html"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> CONTACT US</a>						
+					    <div class="dropdown">
+						  <a href="#" class="btn btn-secondary" id="userNameLogin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						  </a>
+						  <div class="dropdown-menu" style="text-align: center; margin-right:-55px;" >
+						    <a class="dropdown-item" th:href="@{/inforAccount}">Thông tin</a><br>
+						    <a class="dropdown-item" th:href="@{/listOrder}">Đơn mua</a><br>
+						    <form class="dropdown-item" action="#" th:action="@{/j_spring_security_logout}" method="POST">
+					        	<button style="font-size:10px;" type="submit">Đăng xuất</button>
+					    	</form>
+						  </div>
+						</div>
+					    <br>
+					    <!-- <a th:href="@{/product}" th:if="${QL == 1}" style="color:red;">Vào trang Quản Lý</a> -->		
 					</div>
 					<!--  <div class="header-right my-account" style="margin-right:30px;">
 						<a th:href="@{/cart}"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>GIỎ HÀNG</a>
@@ -152,7 +149,7 @@
 								<span id="cart_total" class="cart_total">0 đ</span>
 						</a></h4>
 						<div class="cart-box">
-							<p><a href="javascript:;" class="simpleCart_empty">Empty cart</a></p>
+							<p><a th:href="@{/emptyCart}" class="simpleCart_empty">Empty cart</a></p>
 							<div class="clearfix"> </div>
 						</div>
 					</div>
@@ -172,8 +169,16 @@
 						</button>
 					</div>
 					<!--navbar-header-->
-					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-						<ul class="nav navbar-nav top-nav-info" id="listProductGroup" >
+					<div style="font-size:15px;" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav top-nav-info">
+							<li><a th:href="@{/index}" class="active">TRANG CHỦ</a></li>
+							<li class="dropdown grid">
+								<a href="#" class="dropdown-toggle list1" data-toggle="dropdown">SẢN PHẨM<b class="caret"></b></a>
+								<ul style="margin-left:37%;" class="dropdown-menu" id="listProductGroup">
+								</ul>
+							</li>	
+							<li><a th:href="@{register}">ĐĂNG KÝ</a></li>
+							<li><a th:href="@{/login}">ĐĂNG NHẬP</a></li>
 						</ul> 
 						<div class="clearfix"> </div>
 						<!--//navbar-collapse-->
@@ -187,7 +192,7 @@
 				</nav>
 				<div id="cd-search" class="cd-search">
 					<form>
-						<input type="search" placeholder="Search...">
+						<input type="search" id="searchNameIndex" placeholder="Search...">
 					</form>
 				</div>
 			</div>
@@ -337,27 +342,28 @@
 			</div>
 		</div>
 	</div>
+	
+	
 	<!--//trend-->
 	<!--footer-->
 	<div class="footer">
 		<div class="container">
 			<div class="footer-info">
 				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".5s">
-					<h4 class="footer-logo"><a href="index.html">Modern <b>Shoppe</b> <span class="tag">Everything for Kids world </span> </a></h4>
-					<p>© 2019 HT Pharmacy. All rights reserved | Design by <a href="http://w3layouts.com" target="_blank">HT</a></p>
+					<h4 class="footer-logo"><a href="index.html">HT <b>Pharmacy</b> <span class="tag">Everything for you </span> </a></h4>
+					<p>© 2019 HT Pharmacy. All rights reserved | Design by <a th:href="@{/index}" target="_blank">HT</a></p>
 				</div>
 				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".7s">
-					<h3>Popular</h3>
+					<h3>Về chúng tôi</h3>
 					<ul>
-						<li><a href="about.html">About Us</a></li>
-						<li><a href="products.html">new</a></li>
-						<li><a href="contact.html">Contact Us</a></li>
-						<li><a href="faq.html">FAQ</a></li>
+						<li>100% hàng thật</li>
+						<li>Giao hàng free</li>
+						<li>Bao đổi trả</li>
 					</ul>
 				</div>
 				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".9s">
-					<h3>Subscribe</h3>
-					<p>Sign Up Now For More Information <br> About Our Company </p>
+					<h3>Đăng ký</h3>
+					<p>Đăng ký thông tin của bạn dễ dàng liên lạc </p>
 					<form>
 						<input type="text" placeholder="Enter Your Email" required="">
 						<input type="submit" value="Go">

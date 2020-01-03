@@ -33,5 +33,5 @@ public class SingleReponseBean {
 	public void settProduct(List<TProduct> tProduct) {
 		this.tProduct = tProduct;
 	}
-	
+
 }

@@ -20,6 +20,20 @@ public class TEmployee {
 	private String picture;
 	private String created_by;
 	private String modified_by;
+	private String is_block;
+	private String is_delete;
+	public String getIs_block() {
+		return is_block;
+	}
+	public void setIs_block(String is_block) {
+		this.is_block = is_block;
+	}
+	public String getIs_delete() {
+		return is_delete;
+	}
+	public void setIs_delete(String is_delete) {
+		this.is_delete = is_delete;
+	}
 	public int getId() {
 		return id;
 	}

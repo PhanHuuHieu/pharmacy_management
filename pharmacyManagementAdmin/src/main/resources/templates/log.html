@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+<title>HT-Pharmacy</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link th:href="@{/css/style.css}" rel='stylesheet' type='text/css' />
+<link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css}">
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
+<script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<link th:href="@{/css/SidebarNav.min.css}" media='all' rel='stylesheet' type='text/css'/>
+<script th:src="@{/js/log.js}"></script>
+<script type="text/javascript" charset="utf8" th:src="@{http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js}"></script>
+<script type="text/javascript" charset="utf8" th:src="@{http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js}"></script>
+<link th:href="@{/css/custom.css}" rel="stylesheet">
+<style>
+	.treeview span
+	{
+		margin-left: 30px;
+	}
+</style>
+</head> 
+<body class="cbp-spmenu-push">
+	<div class="main-content">
+	<div class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-spmenu-s1">
+		<aside class="sidebar-left">
+      <nav class="navbar navbar-inverse">
+          <div class="navbar-header">
+            <h1><a class="navbar-brand" th:href="@{/product}"><span class="fa fa-area-chart"></span>Pharmacy<span class="dashboard_text">Admin manager</span></a></h1>
+          </div>
+          <div class=" navbar-collapse">
+            <ul class="sidebar-menu">
+              <li class="treeview">
+				<a th:href="@{/product}"><i class="glyphicon glyphicon-certificate"></i><span>Sản phẩm</span></a>
+			  </li>
+			  <li class="treeview">
+				<a th:href="@{/stock}"><i class="glyphicon glyphicon-bed"></i><span>Kho hàng</span></a>
+			  </li>
+			  <li class="treeview">
+				<a th:href="@{/order}"><i class="glyphicon glyphicon-list-alt"></i><span>Đơn hàng</span></a>
+			  </li>
+			  <li class="treeview">
+				<a th:href="@{/dept}"><i class="glyphicon glyphicon-bitcoin"></i> <span>Công nợ</span></a>
+			  </li>
+			  <li class="treeview">
+				<a th:href="@{/supplier}"><i class="glyphicon glyphicon-leaf"></i> <span>Nhà cung cấp</span></a>
+			  </li>
+			  <li class="treeview" th:if="${status == 1}">
+				<a th:href="@{/log}"><i class="glyphicon glyphicon-duplicate"></i> <span>Nhật ký</span>
+				</a>
+			  </li>
+			  <li class="treeview" th:if="${status == 1}">
+			    <a th:href="@{/account}"><i class="glyphicon glyphicon-user"></i> <span>Tài khoản</span></a>
+			  </li>
+			  <li class="treeview">
+			    <a th:href="@{/linkStatistic}"><i class="glyphicon glyphicon-equalizer"></i><span>Thống kê</span></a>
+			  </li>
+            </ul>
+          </div>
+      </nav>
+    </aside>
+	</div>
+		<div class="sticky-header header-section ">
+			<div class="header-left">
+				<button id="showLeftPush"><i class="glyphicon glyphicon-align-justify"></i></button>
+			</div>
+			<div class="header-right">
+				<div class="profile_details">		
+					<ul>
+						<li class="dropdown profile_details_drop">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+								<div class="profile_img">	
+									<span class="prfil-img"><img th:src="@{/images/2.jpg}" alt=""> </span> 
+									<div class="user-name">
+										<p th:utext="${username_admin}"></p>
+										<span th:utext="${name_role}"></span>
+									</div>
+									<i class="glyphicon glyphicon-menu-down"></i>
+									<div class="clearfix"></div>	
+								</div>	
+							</a>
+							<ul class="dropdown-menu drp-mnu">
+								<li> <a th:href="@{/inforAccountAdmin}"><i class="fa fa-suitcase"></i> Thông tin</a> </li> 
+								<li>
+									<form style="margin-left: 30px;" class="dropdown-item" action="#" th:action="@{/j_spring_security_logout}" method="POST">
+							        	<button style="font-size:10px;" type="submit">Đăng xuất</button>
+							    	</form>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>		
+			</div>
+		</div>
+		<div id="page-wrapper">
+				<h2 class="text-center text-primary">QUẢN LÝ NHẬT KÝ</h2>
+				
+				<div class="main-page">
+					<div class="panel-default">
+						<div class="inbox-page">
+							<div id="log">
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<div class="footer">
+		   <p>&copy; 2019 HT-Pharmacy. All Rights Reserved | Design by <a href="#" target="_blank">HT</a></p>
+	   </div>
+	</div>
+	<script th:src="@{/js/classie.js}"></script>
+	<script>
+		var menuLeft = document.getElementById( 'cbp-spmenu-s1' ),
+			showLeftPush = document.getElementById( 'showLeftPush' ),
+			body = document.body;
+			
+		showLeftPush.onclick = function() {
+			classie.toggle( this, 'active' );
+			classie.toggle( body, 'cbp-spmenu-push-toright' );
+			classie.toggle( menuLeft, 'cbp-spmenu-open' );
+			disableOther( 'showLeftPush' );
+		};
+		
+		function disableOther( button ) {
+			if( button !== 'showLeftPush' ) {
+				classie.toggle( showLeftPush, 'disabled' );
+			}
+		}
+	</script>
+</body>
+</html>

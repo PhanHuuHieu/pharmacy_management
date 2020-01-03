@@ -12,26 +12,51 @@ public class CartBean {
 	private String picture;
 	private String idOrder;
 	private String total_money;
+	private String product_price;
+	private String is_pay_pal;
+
+	public String getIs_pay_pal() {
+		return is_pay_pal;
+	}
+
+	public void setIs_pay_pal(String is_pay_pal) {
+		this.is_pay_pal = is_pay_pal;
+	}
+
+	public String getProduct_price() {
+		return product_price;
+	}
+
+	public void setProduct_price(String product_price) {
+		this.product_price = product_price;
+	}
+
 	public String getTotal_money() {
 		return total_money;
 	}
+
 	public void setTotal_money(String total_money) {
 		this.total_money = total_money;
 	}
+
 	public String getIdOrder() {
 		return idOrder;
 	}
+
 	public void setIdOrder(String idOrder) {
 		this.idOrder = idOrder;
 	}
+
 	public String getPicture() {
 		return picture;
 	}
+
 	public void setPicture(String picture) {
 		this.picture = picture;
 	}
+
 	public CartBean(int id, int amount, int idPro, String name, String price_sell, String note, String color,
-			String weight,String picture,String idOrder,String total_money) {
+			String weight, String picture, String idOrder, String total_money, String product_price) {
 		super();
 		this.id = id;
 		this.amount = amount;
@@ -44,52 +69,88 @@ public class CartBean {
 		this.picture = picture;
 		this.idOrder = idOrder;
 		this.total_money = total_money;
+		this.product_price = product_price;
 	}
+
+	public CartBean(int id, int amount, int idPro, String name, String price_sell, String note, String color,
+			String weight, String picture, String idOrder, String total_money, String product_price,
+			String is_pay_pal) {
+		super();
+		this.id = id;
+		this.amount = amount;
+		this.idPro = idPro;
+		this.name = name;
+		this.price_sell = price_sell;
+		this.note = note;
+		this.color = color;
+		this.weight = weight;
+		this.picture = picture;
+		this.idOrder = idOrder;
+		this.total_money = total_money;
+		this.product_price = product_price;
+		this.is_pay_pal = is_pay_pal;
+	}
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public int getAmount() {
 		return amount;
 	}
+
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
+
 	public int getIdPro() {
 		return idPro;
 	}
+
 	public void setIdPro(int idPro) {
 		this.idPro = idPro;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getPrice_sell() {
 		return price_sell;
 	}
+
 	public void setPrice_sell(String price_sell) {
 		this.price_sell = price_sell;
 	}
+
 	public String getNote() {
 		return note;
 	}
+
 	public void setNote(String note) {
 		this.note = note;
 	}
+
 	public String getColor() {
 		return color;
 	}
+
 	public void setColor(String color) {
 		this.color = color;
 	}
+
 	public String getWeight() {
 		return weight;
 	}
+
 	public void setWeight(String weight) {
 		this.weight = weight;
 	}

@@ -1,29 +1,17 @@
 package pharmacy.management.service.impl;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pharmacy.management.bean.OrderBean;
-import pharmacy.management.bean.ProductBean;
-import pharmacy.management.bean.ReportOrderProduct;
+import pharmacy.management.bean.AccountBean;
 import pharmacy.management.entity.TCustomer;
-import pharmacy.management.entity.TEmployee;
-import pharmacy.management.entity.TProduct;
-import pharmacy.management.entity.TProductGroup;
 import pharmacy.management.form.CustomerForm;
-import pharmacy.management.form.OrderReportForm;
-import pharmacy.management.form.ProductForm;
+import pharmacy.management.form.RegisterForm;
 import pharmacy.management.respository.CustomersRepository;
-import pharmacy.management.respository.EmployeeRepository;
-import pharmacy.management.respository.OrderProductRepository;
-import pharmacy.management.respository.ProductRepository;
 import pharmacy.management.service.CustomerService;
-import pharmacy.management.service.EmployeeService;
-import pharmacy.management.service.OrderProductService;
-import pharmacy.management.service.ProductService;
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -36,7 +24,67 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public void registerCustomer(CustomerForm customerForm) {
-		customersRepository.registerCustomer(customerForm);
+	public void registerCustomer(RegisterForm registerForm) {
+		customersRepository.registerCustomer(registerForm);
+	}
+
+	@Override
+	public List<TCustomer> getIdSocial(String id) {
+		return customersRepository.getIdSocial(id);
+	}
+
+	@Override
+	public void insertCustomer(String name, String id_social) {
+		customersRepository.insertCustomer(name, id_social);
+	}
+
+	@Override
+	public List<TCustomer> findUserAccount(String userName) {
+		return customersRepository.findUserAccount(userName);
+	}
+
+	@Override
+	public List<AccountBean> gettListAccount(String username, String email, String phoneNumber) {
+		return customersRepository.gettListAccount(username, email, phoneNumber);
+	}
+
+	@Override
+	public void blockAccount(String idAccount, String check) {
+		customersRepository.blockAccount(idAccount, check);
+	}
+
+	@Override
+	public void deleteAccount(String idAccount) {
+		customersRepository.deleteAccount(idAccount);
+	}
+
+	@Override
+	public List<TCustomer> getAccountWithEmail(String email) {
+		return customersRepository.getAccountWithEmail(email);
+	}
+
+	@Override
+	public void updatePasswordNew(String password, String idLogin) {
+		customersRepository.updatePasswordNew(password, idLogin);
+	}
+
+	@Override
+	public List<TCustomer> getAccountWithIdLogin(String idLogin) {
+		return customersRepository.getAccountWithIdLogin(idLogin);
+	}
+
+	@Override
+	public void editInforAccount(CustomerForm customerForm, String idLogin) {
+		customersRepository.editInforAccount(customerForm, idLogin);
+	}
+
+	@Override
+	public List<TCustomer> getCustomerWithBarcode(String barcode) {
+		return customersRepository.getCustomerWithBarcode(barcode);
+	}
+
+	@Override
+	public void updatePointCustomerLoyal(String idLogin, double totalMoney) {
+		customersRepository.updatePointCustomerLoyal(idLogin, totalMoney);
 	}
 }

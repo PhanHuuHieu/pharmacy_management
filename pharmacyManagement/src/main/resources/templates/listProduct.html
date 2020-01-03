@@ -16,11 +16,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 <link th:href="@{/css/styleweb.css}" rel="stylesheet" type="text/css" media="all" />
 <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
-
+<link rel="stylesheet" type="text/css" th:href="@{/css/jquery-ui.css}">
 <!--js-->
 <script th:src="@{/js/jquery-1.11.1.min.js}"></script>
 <script th:src="@{/js/modernizr.custom.js}"></script>
-<script th:src="@{/js/listProduct.js}"></script>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js}"></script>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js}"></script>
 <!--//js-->
 <!--flex slider-->
 <script defer th:src="@{/js/jquery.flexslider.js}"></script>
@@ -36,6 +37,7 @@ $(window).load(function() {
 </script>
 <!--flex slider-->
 <script th:src="@{/js/imagezoom.js}"></script>
+<script th:src="@{/js/listProduct.js}"></script>
 <!--cart-->
 <script th:src="@{/js/simpleCart.min.js}"></script>
 <!--cart-->
@@ -60,52 +62,52 @@ $(window).load(function() {
 		
 </script>
 <style>
-.checkboxFive {
-    width: 20px;
-    position: relative;
-}
-.checkboxFive label {
-    cursor: pointer;
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    top: 0;
-    left: 0;
-    background: #eee;
-    border:1px solid #ddd;
-}
-.checkboxFive label:after {
-    opacity: 0.2;
-    content: '';
-    position: absolute;
-    width: 9px;
-    height: 5px;
-    background: transparent;
-    top: 6px;
-    left: 7px;
-    border: 3px solid #333;
-    border-top: none;
-    border-right: none;
- 
-    -webkit-transform: rotate(-45deg);
-    -moz-transform: rotate(-45deg);
-    -o-transform: rotate(-45deg);
-    -ms-transform: rotate(-45deg);
-    transform: rotate(-45deg);
-}
-.checkboxFive label:hover::after {
-    opacity: 0.5;
-}
-/**
- * Create the checkbox state for the tick
- */
-.checkboxFive input[type=checkbox]:checked + label:after {
-    opacity: 1;
-}
 </style>
 <!--//end-smooth-scrolling-->
 </head>
 <body>
+	<div id="chatx">
+		<a href="#" onclick="displayChatBot()" style="font-size:60px; z-index:20; position: fixed; margin-right:35px; margin-bottom:20px; bottom: 0; right: 0;"><span class="fa fa-commenting"></span></a>
+	</div>
+	<div id="username-page" style="display: none;">
+		<div class="username-page-container">
+			<button style="float:right;" onclick="closeUserPage()"><span class="glyphicon glyphicon-remove"></span></button>
+			<h1 class="title-chat">Nhập tên của bạn</h1>
+			<form id="usernameForm" name="usernameForm" style="margin:0 10px 0 10px;">
+				<div class="form-group">
+					<input type="text" id="name" placeholder="Username"
+						autocomplete="off" class="form-control-chat" />
+				</div>
+				<div class="form-group">
+					<button type="submit" class="accent btn-chat username-submit">Bắt đầu chat</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div id="chat-page" class="hidden">
+		<div class="chat-container">
+			<button style="float:right;" onclick="closeChatPage()"><span class="glyphicon glyphicon-remove"></span></button>
+			<div class="chat-header">
+				<h2>HT-Pharmacy Chat</h2>
+			</div>
+			<ul id="messageArea">
+
+			</ul>
+			<form id="messageForm" name="messageForm" nameForm="messageForm">
+				<div class="form-group">
+					<div class="input-group clearfix">
+						<input type="text" id="message" placeholder="Type a message..."
+							autocomplete="off" class="form-control-chat" />
+						<button type="submit" class="primary btn-chat">Send</button>
+						<a th:if="${QL == 1}" href="#" id="txtCheck" onclick="checkChat()">Kiểm tra</a>
+					</div>
+					
+				</div>
+			</form>
+			
+		</div>
+	</div>
+	<script th:src="@{/js/chatBot.js}"></script>
 	<!--header-->
 	<div class="header">
 		<div class="top-header navbar navbar-default"><!--header-one-->
@@ -135,16 +137,26 @@ $(window).load(function() {
 					</ul>
 				</div>
 				<div class="nav navbar-nav logo wow zoomIn animated" data-wow-delay=".7s">
-					<h1><a href="index.html">HT <b>Pharmacy</b><span class="tag">Everything for You </span> </a></h1>
+					<h1><a th:href="@{/index}">HT <b>Pharmacy</b><span class="tag">Everything for You </span> </a></h1>
 				</div>
 				<div class="nav navbar-nav navbar-right header-two-right">
-					<div class="header-right my-account">
-						<a href="contact.html"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> CONTACT US</a>						
+					<div class="header-right my-account" style="margin-top: 40px;">
+						<div class="dropdown">
+						  <a href="#" class="btn btn-secondary" id="userNameLogin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						  </a>
+						  <div class="dropdown-menu" style="text-align: center; margin-right:-55px;" >
+						    <a class="dropdown-item" th:href="@{/inforAccount}">Thông tin</a><br>
+						    <a class="dropdown-item" th:href="@{/listOrder}">Đơn mua</a><br>
+						    <form class="dropdown-item" action="#" th:action="@{/j_spring_security_logout}" method="POST">
+					        	<button style="font-size:10px;" type="submit">Đăng xuất</button>
+					    	</form>
+						  </div>
+						</div>						
 					</div>
 					<div class="header-right cart">
 						<a href="#"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a>
-						<h4><a href="checkout.html">
-								<span class="simpleCart_total"> $0.00 </span> (<span id="simpleCart_quantity" class="simpleCart_quantity"> 0 </span>) 
+						<h4><a th:href="@{/cart}">
+								<span id="cart_total" class="cart_total">0 đ</span>
 						</a></h4>
 						<div class="cart-box">
 							<p><a href="javascript:;" class="simpleCart_empty">Empty cart</a></p>
@@ -168,11 +180,16 @@ $(window).load(function() {
 						</button>
 					</div>
 					<!--navbar-header-->
-					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-						<ul class="nav navbar-nav top-nav-info" >
-							
-							<li th:each="productGroup : ${productGroups}"><a th:href="@{/detailProduct/{id}(id=${productGroup.id})}" th:utext="${productGroup.product_group_name}"></a></li>
-								
+					<div style="font-size:15px;" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav top-nav-info">
+							<li><a th:href="@{/index}" class="active">TRANG CHỦ</a></li>
+							<li class="dropdown grid">
+								<a href="#" class="dropdown-toggle list1" data-toggle="dropdown">SẢN PHẨM<b class="caret"></b></a>
+								<ul style="margin-left:37%;" class="dropdown-menu" id="listProductGroup">
+								</ul>
+							</li>	
+							<li><a th:href="@{/register}">ĐĂNG KÝ</a></li>
+							<li><a th:href="@{/login}">ĐĂNG NHẬP</a></li>
 						</ul> 
 						<div class="clearfix"> </div>
 						<!--//navbar-collapse-->
@@ -186,7 +203,7 @@ $(window).load(function() {
 				</nav>
 				<div id="cd-search" class="cd-search">
 					<form>
-						<input type="search" placeholder="Search...">
+						<input type="search" onkeyup="searchWithName()" id="searchName" placeholder="Search...">
 					</form>
 				</div>
 			</div>
@@ -197,7 +214,7 @@ $(window).load(function() {
 	<div class="breadcrumbs">
 		<div class="container">
 			<ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
-				<li><a href="index.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
+				<li><a th:href="@{/index}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Trang chủ</a></li>
 				<li class="active">Danh sách sản phẩm</li>
 			</ol>
 		</div>
@@ -210,141 +227,39 @@ $(window).load(function() {
 			<div class="col-md-9 product-model-sec">
 				<div id="listProduct">
 				</div>
+				
 			</div>
-			<div class="col-md-3 rsidebar">
+	    		<div class="col-md-3 rsidebar">
 				<div class="rsidebar-top">
 					<div class="sidebar-row">
 						<h4>ĐƠN VỊ</h4>
-						<div class="scroll-pane">
-							<div class="row">
-								<div class="col-md-3">
-									<div class="checkboxFive">
-									   <input type="checkbox" value="Hộp" id="unit" name="unit" />
-									   <label for="checkboxFiveInput"></label>
-									</div>
-								</div>
-								<div class="col-md-9">
-									<h5>Hộp</h5>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-3">
-									<div class="checkboxFive">
-									   <input type="checkbox" value="Viên bao phim" id="unit" name="unit" />
-									   <label for="checkboxFiveInput"></label>
-									</div>
-								</div>
-								<div class="col-md-9">
-									<h5>Viên bao phim</h5>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-3">
-									<div class="checkboxFive">
-									   <input type="checkbox" value="Viên bao đường" id="unit" name="unit" />
-									   <label for="checkboxFiveInput"></label>
-									</div>
-								</div>
-								<div class="col-md-9">
-									<h5>Viên bao đường</h5>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-3">
-									<div class="checkboxFive">
-									   <input type="checkbox" value="Tuýp" id="unit" name="unit" />
-									   <label for="checkboxFiveInput"></label>
-									</div>
-								</div>
-								<div class="col-md-9">
-									<h5>Tuýp</h5>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-3">
-									<div class="checkboxFive">
-									   <input type="checkbox" value="Chai" id="unit" name="unit" />
-									   <label for="checkboxFiveInput"></label>
-									</div>
-								</div>
-								<div class="col-md-9">
-									<h5>Chai</h5>
-								</div>
-							</div>
+						<div class="row row1 scroll-pane">
+							<label class="checkbox"><input type="checkbox" name="searchUnit" value="1"><i></i>Chai</label>
+							<label class="checkbox"><input type="checkbox" name="searchUnit" value="2"><i></i>Tuýp</label>
+							<label class="checkbox"><input type="checkbox" name="searchUnit" value="3"><i></i>Hộp</label>
+							<label class="checkbox"><input type="checkbox" name="searchUnit" value="4"><i></i>Viên bao phim</label>
+							<label class="checkbox"><input type="checkbox" name="searchUnit" value="5"><i></i>Viên bao đường</label>
+							<label class="checkbox"><input type="checkbox" name="searchUnit" value="6"><i></i>Khác</label>
 						</div>
 					</div>
-						<div class="sidebar-row">
-						<h4>MÀU SẮC</h4>
-						<div class="scroll-pane">
-							<div class="row">
-								<div class="col-md-3">
-									<div class="checkboxFive">
-									   <input type="checkbox" value="Xanh" id="" name="color" />
-									   <label for="checkboxFiveInput"></label>
-									</div>
-								</div>
-								<div class="col-md-9">
-									<h5>Xanh</h5>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-3">
-									<div class="checkboxFive">
-									   <input type="checkbox" value="Vàng" id="checkboxFiveInput" name="color" />
-									   <label for="checkboxFiveInput"></label>
-									</div>
-								</div>
-								<div class="col-md-9">
-									<h5>Vàng</h5>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-3">
-									<div class="checkboxFive">
-									   <input type="checkbox" value="Đỏ" id="checkboxFiveInput" name="color" />
-									   <label for="checkboxFiveInput"></label>
-									</div>
-								</div>
-								<div class="col-md-9">
-									<h5>Đỏ</h5>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-3">
-									<div class="checkboxFive">
-									   <input type="checkbox" value="Trắng" id="checkboxFiveInput" name="color" />
-									   <label for="checkboxFiveInput"></label>
-									</div>
-								</div>
-								<div class="col-md-9">
-									<h5>Trắng</h5>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-3">
-									<div class="checkboxFive">
-									   <input type="checkbox" value="Đen" id="checkboxFiveInput" name="color" />
-									   <label for="checkboxFiveInput"></label>
-									</div>
-								</div>
-								<div class="col-md-9">
-									<h5>Đen</h5>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-3">
-									<div class="checkboxFive">
-									   <input type="checkbox" value="Tím" id="checkboxFiveInput" name="color" />
-									   <label for="checkboxFiveInput"></label>
-									</div>
-								</div>
-								<div class="col-md-9">
-									<h5>Tím</h5>
-								</div>
-							</div>
+					<div class="sidebar-row">
+						<h4>NHÀ CUNG CẤP</h4>
+						<div class="row row1 scroll-pane">
+							<label class="checkbox"><input type="checkbox" name="searchSup" value="1" ><i></i>Pharmedic</label>
+							<label class="checkbox"><input type="checkbox" name="searchSup" value="3"><i></i>TW25</label>
+							<label class="checkbox"><input type="checkbox" name="searchSup" value="4"><i></i>FT Pharma</label>
+							<label class="checkbox"><input type="checkbox" name="searchSup" value="5"><i></i>Vidipha</label>
+							<label class="checkbox"><input type="checkbox" name="searchSup" value="6"><i></i>GSK</label>
+							<label class="checkbox"><input type="checkbox" name="searchSup" value="7"><i></i>OPC</label>
+							<label class="checkbox"><input type="checkbox" name="searchSup" value="8"><i></i>Nadyphar</label>
 						</div>
-					</div>	 
+					</div>		
+					<div class="sidebar-row row">
+						<button id="btnSearch" onclick="getPageProduct(1,1)" class="btn btn-success">Tìm Kiếm</button>
+					</div>			 
 				</div>
+				<div id="kaka">
+	    		</div>
 			</div>
 			<div class="clearfix"> </div>
 		</div>
@@ -355,22 +270,20 @@ $(window).load(function() {
 		<div class="container">
 			<div class="footer-info">
 				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".5s">
-					<h4 class="footer-logo"><a href="index.html">Modern <b>Shoppe</b> <span class="tag">Everything for Kids world </span> </a></h4>
-					<p>© 2016 Modern Shoppe . All rights reserved | Design by <a href="http://w3layouts.com" target="_blank">W3layouts</a></p>
+					<h4 class="footer-logo"><a href="index.html">HT <b>Pharmacy</b> <span class="tag">Everything for you </span> </a></h4>
+					<p>© 2019 HT Pharmacy. All rights reserved | Design by <a th:href="@{/index}" target="_blank">HT</a></p>
 				</div>
 				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".7s">
-					<h3>Popular</h3>
+					<h3>Về chúng tôi</h3>
 					<ul>
-						<li><a href="about.html">About Us</a></li>
-						<li><a href="products.html">new</a></li>
-						<li><a href="contact.html">Contact Us</a></li>
-						<li><a href="faq.html">FAQ</a></li>
-						<li><a href="checkout.html">Wishlist</a></li>
+						<li>100% hàng thật</li>
+						<li>Giao hàng free</li>
+						<li>Bao đổi trả</li>
 					</ul>
 				</div>
 				<div class="col-md-4 footer-grids wow fadeInUp animated" data-wow-delay=".9s">
-					<h3>Subscribe</h3>
-					<p>Sign Up Now For More Information <br> About Our Company </p>
+					<h3>Đăng ký</h3>
+					<p>Đăng ký thông tin của bạn dễ dàng liên lạc </p>
 					<form>
 						<input type="text" placeholder="Enter Your Email" required="">
 						<input type="submit" value="Go">
@@ -380,7 +293,7 @@ $(window).load(function() {
 			</div>
 		</div>
 	</div>
-	<!--//footer-->			
+	<!--//footer-->		
 		<!-- the jScrollPane script -->
 	<script type="text/javascript" th:src="@{/js/jquery.jscrollpane.min.js}"></script>
 			<script type="text/javascript" id="sourcecode">

@@ -1,0 +1,293 @@
+<!DOCTYPE HTML>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+<title>HT-Pharmacy</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link th:href="@{/css/style.css}" rel='stylesheet' type='text/css' />
+<link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css}">
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
+<script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<link th:href="@{/css/SidebarNav.min.css}" media='all' rel='stylesheet' type='text/css'/>
+<script th:src="@{/js/product.js}"></script>
+<script type="text/javascript" charset="utf8" th:src="@{http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js}"></script>
+<script type="text/javascript" charset="utf8" th:src="@{http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js}"></script>
+<link th:href="@{/css/custom.css}" rel="stylesheet">
+<style>
+	.treeview span
+	{
+		margin-left: 30px;
+	}
+	#imageProduct{
+		width:50px;
+		height:30px;
+	}
+</style>
+</head> 
+<body class="cbp-spmenu-push">
+	<div class="main-content">
+	<div class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-spmenu-s1">
+		<aside class="sidebar-left">
+      <nav class="navbar navbar-inverse">
+          <div class="navbar-header">
+            <h1><a class="navbar-brand" th:href="@{/product}"><span class="fa fa-area-chart"></span>Pharmacy<span class="dashboard_text">Admin manager</span></a></h1>
+          </div>
+          <div class=" navbar-collapse">
+            <ul class="sidebar-menu">
+              <li class="treeview">
+				<a th:href="@{/product}"><i class="glyphicon glyphicon-certificate"></i><span>Sản phẩm</span></a>
+			  </li>
+			  <li class="treeview">
+				<a th:href="@{/stock}"><i class="glyphicon glyphicon-bed"></i><span>Kho hàng</span></a>
+			  </li>
+			  <li class="treeview">
+				<a th:href="@{/order}"><i class="glyphicon glyphicon-list-alt"></i><span>Đơn hàng</span></a>
+			  </li>
+			  <li class="treeview">
+				<a th:href="@{/dept}"><i class="glyphicon glyphicon-bitcoin"></i> <span>Công nợ</span></a>
+			  </li>
+			  <li class="treeview">
+				<a th:href="@{/supplier}"><i class="glyphicon glyphicon-leaf"></i> <span>Nhà cung cấp</span></a>
+			  </li>
+			  <li class="treeview" th:if="${status == 1}">
+				<a th:href="@{/log}"><i class="glyphicon glyphicon-duplicate"></i> <span>Nhật ký</span>
+				</a>
+			  </li>
+			  <li class="treeview" th:if="${status == 1}">
+			    <a th:href="@{/account}"><i class="glyphicon glyphicon-user"></i> <span>Tài khoản</span></a>
+			  </li>
+			  <li class="treeview">
+			    <a th:href="@{/linkStatistic}"><i class="glyphicon glyphicon-equalizer"></i><span>Thống kê</span></a>
+			  </li>
+            </ul>
+          </div>
+      </nav>
+    </aside>
+	</div>
+		<div class="sticky-header header-section ">
+			<div class="header-left">
+				<button id="showLeftPush"><i class="glyphicon glyphicon-align-justify"></i></button>
+			</div>
+			<div class="header-right">
+				<div class="profile_details">		
+					<ul>
+						<li class="dropdown profile_details_drop">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+								<div class="profile_img">	
+									<span class="prfil-img"><img th:src="@{/images/2.jpg}" alt=""> </span> 
+									<div class="user-name">
+										<p th:utext="${username_admin}"></p>
+										<span th:utext="${name_role}"></span>
+									</div>
+									<i class="glyphicon glyphicon-menu-down"></i>
+									<div class="clearfix"></div>	
+								</div>	
+							</a>
+							<ul class="dropdown-menu drp-mnu">
+								<li> <a th:href="@{/inforAccountAdmin}"><i class="fa fa-suitcase"></i> Thông tin</a> </li> 
+								<li>
+									<form style="margin-left: 30px;" class="dropdown-item" action="#" th:action="@{/j_spring_security_logout}" method="POST">
+							        	<button style="font-size:10px;" type="submit">Đăng xuất</button>
+							    	</form>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>		
+			</div>
+		</div>
+		<div id="page-wrapper">
+				<h2 class="text-center text-primary">QUẢN LÝ SẢN PHẨM</h2>
+				
+				<div class="inline-form widget-shadow">
+					<div class="form-body">
+						<div data-example-id="simple-form-inline"> 
+							<form class="form-inline" id="formProductSearch" name="nformProduct" method="POST"> 
+								<div class="form-group"> 
+									<input type="text" class="form-control" id="nameSearch" placeholder="Tên sản phẩm"> 
+								</div> 
+								<div class="form-group">
+									<select class="form-control" name="fk_product_group_id" id="fk_product_group_id_search">
+										<option value="-1">Chọn nhóm sản phẩm</option>
+										<option th:each="gp : ${listProductGroup}" th:value="${gp.id}" th:text="${gp.product_group_name}"></option>
+									</select>
+								</div> 
+								<div class="form-group">
+									<input type="number" class="form-control" id="price_orginal_search" placeholder="Giá nhập">
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" id="price_sell_search" placeholder="Giá bán">
+								</div>
+								<button type="submit" class="btn btn-default">Tìm kiếm</button> 
+							</form> 
+						</div>
+					</div>
+				</div>
+				<div class="main-page">
+					<div class="tables">
+						<div class="bs-example widget-shadow" data-example-id="hoverable-table">
+							<table class="table table-hover" id="tableProduct"> 
+								<thead> 
+									<tr> 
+										<th>ID</th> 
+										<th>Tên SP</th> 
+										<th>Giá nhập</th> 
+										<th>Giá bán</th> 
+										<th>Khối lượng</th> 
+										<th>Màu sắc</th> 
+										<th>Nhóm SP</th> 
+										<th>Ảnh</th>
+										<th></th>
+									</tr> 
+								</thead> 
+								<tbody id="table_data"> 
+								</tbody> 
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-7">
+					</div>
+					<div class="col-md-2">
+					</div>
+					<div class="col-md-3">
+						<button style="margin-top: 30px;" type="button" onclick="refresh()" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#addProductModal">Thêm sản phẩm</button>
+					</div>
+					<!-- Modal -->
+					<div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog" style="width: 70%; margin-left:16%;" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							</div>
+							<div class="modal-body">
+								<div class="form-grids row widget-shadow" data-example-id="basic-forms"> 
+								<div class="form-body">
+									<p id="error" th:utext="${error}" style="color:red;"></p>
+									<form th:action="@{/addProduct}" th:object="${productForm}" id="formProduct" name="nformProduct" method="POST" enctype="multipart/form-data"> 
+										
+										<div class="form-group"> 
+												<label>Tên sản phẩm</label> 
+												<input type="text" id="name" onkeyup="validateProduct()" class="form-control" th:field="*{name}" placeholder="Tên sản phẩm"> 
+												<input type="hidden" id="id" th:field="*{id}">
+										</div> 
+										<div class="form-group row">
+											<div class="col-md-6">
+												<label>Nhà cung cấp</label>
+												<select class="form-control" id="fk_supplier_id" name="fk_supplier_id" th:field="*{fk_supplier_id}">
+													<option th:each="sp : ${listSupplier}" th:value="${sp.id}" th:text="${sp.supplier_name}"></option>
+												</select>
+											</div>
+											<div class="col-md-6">
+												<label>Đơn vị</label> 
+												<select class="form-control" id="fk_unit_id" th:field="*{fk_unit_id}">
+													<option th:each="un : ${listUnit}" th:value="${un.id}" th:text="${un.unit_name}"></option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group row">
+											<div class="col-md-6">
+												<label >Ngày sản xuất</label> 
+												<input type="date" class="form-control" onchange="validateProduct()" id="date_manufature" th:field="*{date_manufature}" placeholder="Giá nhập"> 
+											</div>
+											<div class="col-md-6">
+												<label>Ngày hết hạn</label> 
+												<input type="date" class="form-control" onchange="validateProduct()" id="date_expirate" th:field="*{date_expirate}" placeholder="Giá bán"> 
+											</div>
+										</div>
+										<div class="form-group row">
+											<div class="col-md-6">
+												<label >Giá nhập</label> 
+												<input type="number" class="form-control" onchange="validateProduct()" id="price_orginal" th:field="*{price_orginal}" placeholder="Giá nhập"> 
+											</div>
+											<div class="col-md-6">
+												<label>Giá bán</label> 
+												<input type="number" class="form-control" onchange="validateProduct()" id="price_sell" th:field="*{price_sell}" placeholder="Giá bán"> 
+											</div>
+										</div>
+										<div class="form-group">
+												<label>Nhóm SP</label>
+												<select class="form-control" id="fk_product_group_id" name="fk_product_group_id" th:field="*{fk_product_group_id}">
+													<option th:each="gp : ${listProductGroup}" th:value="${gp.id}" th:text="${gp.product_group_name}"></option>
+												</select>
+										</div>
+										<div class="form-group row">
+											<div class="col-md-6">
+												<label>Khối lượng</label>
+												<input type="number" class="form-control" onchange="validateProduct()" id="weight" th:field="*{weight}" placeholder="Khối lượng"> 
+											</div>
+											<div class="col-md-6">
+												<label>Màu sắc</label>
+												<input type="text" class="form-control" onkeyup="validateProduct()" id="color" th:field="*{color}" placeholder="Màu sắc"> 
+											</div>
+										</div>  
+										<div class="form-group row"> 
+											<div class="col-md-6">
+												<label>Hình ảnh 1</label> 
+												<input type="file" id="picturee" th:field="*{picture}" accept=".jpg, .jpeg, .png">
+											</div>
+											<div class="col-md-6">
+												<img src="" id="picture" th:field="*{picture}"  width="70px" height="60px">
+											</div>
+										</div>
+										<div class="form-group row"> 
+											<div class="col-md-6">
+												<label>Hình ảnh 2</label> 
+												<input type="file" id="picture" th:field="*{picture1}" accept=".jpg, .jpeg, .png">
+											</div>
+											<div class="col-md-6">
+												<img th:src="@{/images/nenxanh.PNG}" id="picture1" th:field="*{picture1}" width="70px" height="60px">
+											</div>
+										</div>
+										<div class="form-group row"> 
+											<div class="col-md-6">
+												<label>Hình ảnh 3</label> 
+												<input type="file" id="picture2l" th:field="*{picture2}" accept=".jpg, .jpeg, .png">
+											</div>
+											<div class="col-md-6">
+												<img th:src="@{/images/nenxanh.PNG}" id="picture2" th:field="*{picture2}" width="70px" height="60px">
+											</div>
+										</div>
+										<div class="form-group"> 
+											<br>
+											<label>Miêu tả</label>
+											<textarea name="message" class="form-control" id="note" th:field="*{note}" rows="4" cols="70"></textarea>
+										</div>
+										<button type="submit" class="btn btn-primary" id="btnSb">Lưu sản phẩm</button> 
+									</form> 
+								</div>
+							</div>
+							</div>
+						</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<div class="footer">
+		   <p>&copy; 2019 HT-Pharmacy. All Rights Reserved | Design by <a href="#" target="_blank">HT</a></p>
+	   </div>
+	</div>
+	<script th:src="@{/js/classie.js}"></script>
+	<script>
+		var menuLeft = document.getElementById( 'cbp-spmenu-s1' ),
+			showLeftPush = document.getElementById( 'showLeftPush' ),
+			body = document.body;
+			
+		showLeftPush.onclick = function() {
+			classie.toggle( this, 'active' );
+			classie.toggle( body, 'cbp-spmenu-push-toright' );
+			classie.toggle( menuLeft, 'cbp-spmenu-open' );
+			disableOther( 'showLeftPush' );
+		};
+		
+		function disableOther( button ) {
+			if( button !== 'showLeftPush' ) {
+				classie.toggle( showLeftPush, 'disabled' );
+			}
+		}
+	</script>
+</body>
+</html>

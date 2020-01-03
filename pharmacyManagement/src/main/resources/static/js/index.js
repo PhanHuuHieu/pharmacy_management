@@ -1,7 +1,12 @@
             $(document).ready(function () {
             	productNew();
             	productPopular();
-            	productGroup();
+            	var x = window.location;
+            	//alert(.substr(27,30));
+            	if(x.href === 'http://localhost:8080/index#_=_' || x.href === 'http://localhost:8080/index#') {
+            		
+            		window.location = 'http://localhost:8080/index';
+            	}
 			});
 			function productNew() {
 			    $.ajax({
@@ -18,7 +23,7 @@
 							hi+='<a href="detail/'+data.tProduct[i].id+'"><img src="'+data.tProduct[i].picture+'" class="img-responsive" alt=""/></a>';
 							hi+='<div class="new-text">';
 							hi+='<ul>';
-							hi+='<li><a class="item_add" onclick="addCart('+data.tProduct[i].id+')" href="#">Thêm giỏ hàng</a></li>';
+							hi+='<li><a class="item_add" onclick="addCart('+data.tProduct[i].id+',1)" href="#">Thêm giỏ hàng</a></li>';
 							hi+='<li><a href="detail/'+data.tProduct[i].id+'">Xem chi tiết</a></li>';
 							hi+='</ul>';
 							hi+='</div>';
@@ -33,6 +38,8 @@
 			        	}
 			        	
 			        	$('#hihi').html(hi);
+			        	
+						
 			        },
 			        error: function (e) {
 			        	alert('er');
@@ -56,9 +63,9 @@
 							hi+='<p><span class="item_price">'+data.tProduct[i].price_sell+' đ</span></p>';
 							hi+='<h4>'+data.tProduct[i].note+'</h4>';
 							hi+='<ul>';
-							hi+='<li><a href="#"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span></a></li>';
-							hi+='<li><a class="item_add" href="#" onclick="addCart('+data.tProduct[i].id+')"><span class="glyphicon glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a></li>';
-							hi+='<li><a href="#"><span class="glyphicon glyphicon glyphicon-heart-empty" aria-hidden="true"></span></a></li>';
+							hi+='<li><a href="detail/'+data.tProduct[i].id+'" ><span class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true"></span></a></li>';
+							// if have comment, pick it here
+							hi+='<li><a class="item_add" href="#" onclick="addCart('+data.tProduct[i].id+',1)"><span class="glyphicon glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a></li>';
 							hi+='</ul>';
 							hi+='</div>';
 						    hi+='</div>';
@@ -71,40 +78,5 @@
 			        }
 			    });
 			}
-			function productGroup() {
-			    $.ajax({
-			        type: "GET",
-			        contentType: "application/json",
-			        url: /*window.location.pathname*/"/getProductGroup",
-			        dataType: 'json',
-			        success: function (data) {
-			        	var hi = '';
-			        	for(var i=0;i<data.tProductGroup.length;i++)
-				        {
-			        		hi+='<li><a onclick="getDetailProductGroup('+data.tProductGroup[i].id+')" href="#" class="active">'+data.tProductGroup[i].product_group_name+'</a></li>';
-			        	}
-			        	
-			        	$('#listProductGroup').html(hi);
-			        },
-			        error: function (e) {
-			        	alert('er');
-			        }
-			    });
-			}
-			function getDetailProductGroup(id) {
-			    $.ajax({
-			        type: "GET",
-			        contenType: "application/json",
-			        url: /*window.location.pathname*/"/getDataListProduct",
-			        data: {
- 		                id: JSON.stringify(id)
- 		            },
-			        dataType: 'json',
-			        success: function (data) {
-			        	window.location.pathname = 'listProduct';
-			        },
-			        error: function (e) {
-			        	alert('er');
-			        }
-			    });
-			}
+			
+			

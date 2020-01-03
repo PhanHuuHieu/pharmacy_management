@@ -17,6 +17,41 @@ public class TCustomer {
 	private String picture;
 	private int created_by;
 	private int modified_by;
+	private String id_social;
+	private String is_block;
+	private String is_delete;
+	private String barcode;
+	private int point;
+	public int getPoint() {
+		return point;
+	}
+	public void setPoint(int point) {
+		this.point = point;
+	}
+	public String getBarcode() {
+		return barcode;
+	}
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
+	}
+	public String getIs_block() {
+		return is_block;
+	}
+	public void setIs_block(String is_block) {
+		this.is_block = is_block;
+	}
+	public String getIs_delete() {
+		return is_delete;
+	}
+	public void setIs_delete(String is_delete) {
+		this.is_delete = is_delete;
+	}
+	public String getId_social() {
+		return id_social;
+	}
+	public void setId_social(String id_social) {
+		this.id_social = id_social;
+	}
 	public int getId() {
 		return id;
 	}
