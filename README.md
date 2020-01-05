@@ -5,4 +5,9 @@ Website quản lí nhà thuốc
 - folder pharmacyManagement: Website dành cho client
 - folder pharmacyManagementAdmin: Website dành cho admin
 - PP_TLCN: powerpoint thuyết trình
-
+- Deploy heroku 
++ Web client: https://ht-pharmacy.herokuapp.com/   
++ Web admin: https://ht-pharmacy-admin.herokuapp.com/login
+- Tài khoản: 
++ Client: MeoMeo - 123456789
++ Admin: HeoCon - 123456789
