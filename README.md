@@ -6,6 +6,7 @@ Website quản lí nhà thuốc
 - folder pharmacyManagementAdmin: Website dành cho admin
 - PP_TLCN: powerpoint thuyết trình
 - Deploy heroku 
+- Use case view: usecase diagram
 + Web client: https://ht-pharmacy.herokuapp.com/   
 + Web admin: https://ht-pharmacy-admin.herokuapp.com/login
 - Tài khoản: 
